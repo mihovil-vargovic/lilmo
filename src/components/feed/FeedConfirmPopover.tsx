@@ -11,12 +11,13 @@ import { cn } from '@/lib/utils'
 interface FeedConfirmPopoverProps {
   open: boolean
   onClose: () => void
-  onConfirm: (loggedAt: Date, feedType: 'bottle' | 'boobies', durationMinutes?: number) => Promise<void>
+  onConfirm: (loggedAt: Date, feedType: 'bottle' | 'boobies', durationMinutes?: number, amountMl?: number) => Promise<void>
   editEntry?: { id: string; logged_at: string } | null
   onUpdate?: (id: string, loggedAt: Date) => Promise<void>
 }
 
 const DURATION_OPTIONS = [10, 15, 20, 25, 30]
+const AMOUNT_OPTIONS = [10, 20, 30, 40]
 
 export default function FeedConfirmPopover({
   open,
@@ -29,6 +30,7 @@ export default function FeedConfirmPopover({
   const [saving, setSaving] = useState(false)
   const [feedType, setFeedType] = useState<'bottle' | 'boobies'>('bottle')
   const [durationMinutes, setDurationMinutes] = useState(15)
+  const [amountMl, setAmountMl] = useState(20)
 
   useEffect(() => {
     if (open) {
@@ -39,6 +41,7 @@ export default function FeedConfirmPopover({
       }
       setFeedType('bottle')
       setDurationMinutes(15)
+      setAmountMl(20)
     }
   }, [open, editEntry])
 
@@ -57,7 +60,8 @@ export default function FeedConfirmPopover({
         await onConfirm(
           time,
           feedType,
-          feedType === 'boobies' ? durationMinutes : undefined
+          feedType === 'boobies' ? durationMinutes : undefined,
+          feedType === 'bottle' ? amountMl : undefined
         )
       }
       onClose()
@@ -94,8 +98,33 @@ export default function FeedConfirmPopover({
 
         {/* Bottle content */}
         {(editEntry || feedType === 'bottle') && (
-          <div className="flex items-center justify-center py-4">
-            <TimePicker value={time} onChange={setTime} />
+          <div className="space-y-5">
+            <div className="flex items-center justify-center py-4">
+              <TimePicker value={time} onChange={setTime} />
+            </div>
+
+            {!editEntry && (
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground text-center">Amount</p>
+                <div className="flex gap-2 justify-center flex-wrap">
+                  {AMOUNT_OPTIONS.map((ml) => (
+                    <button
+                      key={ml}
+                      type="button"
+                      onClick={() => setAmountMl(ml)}
+                      className={cn(
+                        'px-4 py-2 rounded-full text-sm font-medium transition-colors',
+                        amountMl === ml
+                          ? 'bg-primary text-primary-foreground'
+                          : 'border border-border bg-background text-foreground'
+                      )}
+                    >
+                      {ml}ml
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 

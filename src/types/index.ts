@@ -7,6 +7,7 @@ export interface FeedEntry {
   created_at: string
   feed_type?: 'bottle' | 'boobies'
   duration_minutes?: number
+  amount_ml?: number
 }
 
 export interface PoopEntry {

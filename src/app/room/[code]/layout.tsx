@@ -24,16 +24,16 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
       {/* Sticky header + tabs */}
       <div className="sticky top-0 z-20 bg-background">
         <div className="h-12 flex items-center justify-between px-4 border-b border-border">
-          <div className="flex items-center gap-3">
-            <span className="text-lg font-semibold tracking-tight">Lilmo</span>
+          <span className="text-lg font-semibold tracking-tight">Lilmo</span>
+          <div className="flex items-center gap-2">
+            <RoomCode code={code} />
             <Link
               href="/join"
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              Switch room
+              Switch
             </Link>
           </div>
-          <RoomCode code={code} />
         </div>
         <TabBar code={code} />
       </div>

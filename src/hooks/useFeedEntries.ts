@@ -80,7 +80,7 @@ export function useFeedEntries(roomCode: string) {
     }
   }, [roomCode])
 
-  const addEntry = async (loggedAt: Date, feedType: 'bottle' | 'boobies' = 'bottle', durationMinutes?: number) => {
+  const addEntry = async (loggedAt: Date, feedType: 'bottle' | 'boobies' = 'bottle', durationMinutes?: number, amountMl?: number) => {
     const now = new Date()
     const oneMinuteAgo = new Date(now.getTime() - 60000)
 
@@ -100,6 +100,7 @@ export function useFeedEntries(roomCode: string) {
       created_at: now.toISOString(),
       feed_type: feedType,
       duration_minutes: durationMinutes,
+      amount_ml: amountMl,
     }
 
     // Optimistic update
@@ -118,6 +119,7 @@ export function useFeedEntries(roomCode: string) {
       logged_at: loggedAt.toISOString(),
       feed_type: feedType,
       duration_minutes: durationMinutes,
+      amount_ml: amountMl,
     })
 
     if (error) {
