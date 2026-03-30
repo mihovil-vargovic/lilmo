@@ -5,6 +5,8 @@ export interface FeedEntry {
   room_code: string
   logged_at: string
   created_at: string
+  feed_type?: 'bottle' | 'boobies'
+  duration_minutes?: number
 }
 
 export interface PoopEntry {

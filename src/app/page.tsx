@@ -7,7 +7,15 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    const code = localStorage.getItem('lilmo_room')
+    // Check localStorage first, then fall back to cookie
+    let code = localStorage.getItem('lilmo_room')
+    if (!code) {
+      const match = document.cookie.match(/(?:^|;\s*)lilmo_room=([^;]+)/)
+      if (match) {
+        code = match[1]
+        localStorage.setItem('lilmo_room', code) // restore localStorage from cookie
+      }
+    }
     if (code) {
       router.replace(`/room/${code}/feed`)
     } else {

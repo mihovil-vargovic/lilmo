@@ -53,7 +53,7 @@ export default function FeedList({
       {entries.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
           <p className="text-sm text-muted-foreground">
-            No entries yet. Tap Add Feed to get started.
+            No entries yet. Tap Add Food to get started.
           </p>
         </div>
       ) : (

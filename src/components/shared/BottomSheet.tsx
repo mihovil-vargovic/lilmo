@@ -24,9 +24,9 @@ export default function BottomSheet({
     <Sheet open={open} onOpenChange={(o) => { if (!o) onClose() }}>
       <SheetContent
         side="bottom"
-        className="rounded-t-2xl px-0 pb-0 max-h-[90vh] overflow-y-auto"
+        className="rounded-t-2xl px-0 pb-0 max-h-[90vh] overflow-y-auto transition-transform duration-300"
       >
-        <SheetHeader className="px-6 pb-4 border-b border-border text-left">
+        <SheetHeader className="px-6 pb-4 border-b border-border text-left flex-row items-center justify-between pr-14">
           <SheetTitle className="text-lg font-semibold">{title}</SheetTitle>
         </SheetHeader>
         <div className="p-6 pb-safe">{children}</div>

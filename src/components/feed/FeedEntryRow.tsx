@@ -21,12 +21,22 @@ export default function FeedEntryRow({
     minute: '2-digit',
   })
 
+  const showDuration =
+    entry.feed_type === 'boobies' && entry.duration_minutes != null
+
   return (
     <SwipeableRow onEdit={() => onEdit(entry)} onDelete={() => onDelete(entry.id)}>
       <div className="flex items-center justify-between px-4 py-3.5 border-b border-border last:border-0 bg-background">
-        <span className="text-sm font-semibold tabular-nums">
-          {time}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold tabular-nums">
+            {time}
+          </span>
+          {showDuration && (
+            <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+              {entry.duration_minutes} min
+            </span>
+          )}
+        </div>
         <FeedCountdown loggedAt={entry.logged_at} />
       </div>
     </SwipeableRow>
