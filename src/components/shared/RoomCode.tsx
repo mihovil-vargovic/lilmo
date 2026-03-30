@@ -25,6 +25,7 @@ export default function RoomCode({ code }: RoomCodeProps) {
       className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted hover:bg-secondary transition-colors text-muted-foreground"
       title="Copy room code"
     >
+      <span className="text-xs text-muted-foreground font-medium">Room</span>
       <span className="text-xs font-mono font-medium tracking-widest">{code}</span>
       {copied ? (
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
