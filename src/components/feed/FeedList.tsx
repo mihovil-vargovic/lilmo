@@ -1,0 +1,96 @@
+'use client'
+
+import { useState } from 'react'
+import { useFeedEntries } from '@/hooks/useFeedEntries'
+import { groupByDay } from '@/lib/timeUtils'
+import DayGroup from '@/components/shared/DayGroup'
+import FeedEntryRow from './FeedEntryRow'
+import FeedConfirmPopover from './FeedConfirmPopover'
+import { FeedEntry } from '@/types'
+
+interface FeedListProps {
+  roomCode: string
+  showPopover: boolean
+  onClosePopover: () => void
+}
+
+export default function FeedList({
+  roomCode,
+  showPopover,
+  onClosePopover,
+}: FeedListProps) {
+  const { entries, loading, addEntry, updateEntry, deleteEntry } =
+    useFeedEntries(roomCode)
+  const [editEntry, setEditEntry] = useState<FeedEntry | null>(null)
+  const [showEditPopover, setShowEditPopover] = useState(false)
+
+  const handleEdit = (entry: FeedEntry) => {
+    setEditEntry(entry)
+    setShowEditPopover(true)
+  }
+
+  const handleDelete = async (id: string) => {
+    await deleteEntry(id)
+  }
+
+  const groups = groupByDay(entries)
+
+  if (loading) {
+    return (
+      <div className="px-4 py-4 space-y-3">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="animate-pulse bg-muted rounded h-4 w-full"
+          />
+        ))}
+      </div>
+    )
+  }
+
+  return (
+    <>
+      {entries.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
+          <p className="text-sm text-muted-foreground">
+            No entries yet. Tap Add Feed to get started.
+          </p>
+        </div>
+      ) : (
+        <div className="pb-28">
+          {groups.map((group) => (
+            <DayGroup key={group.date} label={group.label}>
+              {group.entries.map((entry) => (
+                <FeedEntryRow
+                  key={entry.id}
+                  entry={entry}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </DayGroup>
+          ))}
+        </div>
+      )}
+
+      {/* Add popover */}
+      <FeedConfirmPopover
+        open={showPopover}
+        onClose={onClosePopover}
+        onConfirm={addEntry}
+      />
+
+      {/* Edit popover */}
+      <FeedConfirmPopover
+        open={showEditPopover}
+        onClose={() => {
+          setShowEditPopover(false)
+          setEditEntry(null)
+        }}
+        onConfirm={addEntry}
+        editEntry={editEntry}
+        onUpdate={updateEntry}
+      />
+    </>
+  )
+}
