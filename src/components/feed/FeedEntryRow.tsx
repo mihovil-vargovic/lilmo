@@ -32,6 +32,11 @@ export default function FeedEntryRow({
           {time}
         </span>
         <div className="flex items-center gap-2">
+          {entry.feed_type === 'bottle' && entry.amount_ml != null && (
+            <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+              {entry.amount_ml} ml
+            </span>
+          )}
           {entry.feed_type === 'boobies' && entry.duration_minutes != null && (
             <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
               {entry.duration_minutes} min
