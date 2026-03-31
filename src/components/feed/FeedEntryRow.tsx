@@ -28,20 +28,20 @@ export default function FeedEntryRow({
   return (
     <SwipeableRow onEdit={() => onEdit(entry)} onDelete={() => onDelete(entry.id)}>
       <div className="flex items-center justify-between px-4 py-3.5 bg-background">
+        <span className="text-sm font-semibold tabular-nums">
+          {time}
+        </span>
         <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold tabular-nums">
-            {time}
-          </span>
-          <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-            {feedLabel}
-          </span>
           {entry.feed_type === 'boobies' && entry.duration_minutes != null && (
             <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
               {entry.duration_minutes} min
             </span>
           )}
+          <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+            {feedLabel}
+          </span>
+          <FeedCountdown loggedAt={entry.logged_at} isLatest={isLatest} />
         </div>
-        <FeedCountdown loggedAt={entry.logged_at} isLatest={isLatest} />
       </div>
     </SwipeableRow>
   )
