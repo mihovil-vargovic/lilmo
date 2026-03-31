@@ -24,12 +24,12 @@ export default function BottomSheet({
     <Sheet open={open} onOpenChange={(o) => { if (!o) onClose() }}>
       <SheetContent
         side="bottom"
-        className="px-0 pb-0 max-h-[90vh] overflow-y-auto"
+        className="px-0 pb-0 max-h-[90vh] overflow-y-auto overflow-x-hidden"
       >
-        <SheetHeader className="px-6 pb-4 border-b border-border text-left flex-row items-center justify-between pr-14">
+        <SheetHeader className="px-4 pb-4 border-b border-border text-left flex-row items-center justify-between pr-14">
           <SheetTitle className="text-lg font-semibold">{title}</SheetTitle>
         </SheetHeader>
-        <div className="p-6 pb-safe">{children}</div>
+        <div className="p-4 pb-safe">{children}</div>
       </SheetContent>
     </Sheet>
   )
