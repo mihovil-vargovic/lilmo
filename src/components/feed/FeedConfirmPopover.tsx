@@ -86,10 +86,10 @@ export default function FeedConfirmPopover({
 
         {/* Options — overlapping grid so height never shifts */}
         {!editEntry && (
-          <div className="grid">
+          <div className="grid w-full min-w-0">
             {/* Bottle: amount */}
             <div className={cn(
-              'col-start-1 row-start-1 flex flex-col items-center gap-3',
+              'col-start-1 row-start-1 flex flex-col items-center gap-3 w-full min-w-0',
               feedType !== 'bottle' && 'invisible pointer-events-none'
             )}>
               <p className="text-sm text-muted-foreground">Amount</p>
@@ -114,7 +114,7 @@ export default function FeedConfirmPopover({
 
             {/* Boobies: duration */}
             <div className={cn(
-              'col-start-1 row-start-1 flex flex-col items-center gap-3',
+              'col-start-1 row-start-1 flex flex-col items-center gap-3 w-full min-w-0',
               feedType !== 'boobies' && 'invisible pointer-events-none'
             )}>
               <div className="flex items-center justify-center gap-1.5 w-full">
@@ -124,7 +124,7 @@ export default function FeedConfirmPopover({
                   Ended at <span className="font-medium text-foreground">{endsAtStr}</span>
                 </p>
               </div>
-              <div className="flex gap-2 overflow-x-auto w-full pb-1 scrollbar-none" style={{WebkitOverflowScrolling: 'touch'}}>
+              <div className="flex gap-2 overflow-x-auto w-full pb-1 scrollbar-none [touch-action:pan-x]">
                 {DURATION_OPTIONS.map((mins) => (
                   <button
                     key={mins}
