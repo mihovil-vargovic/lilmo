@@ -117,14 +117,14 @@ export default function FeedConfirmPopover({
               'col-start-1 row-start-1 flex flex-col items-center gap-3',
               feedType !== 'boobies' && 'invisible pointer-events-none'
             )}>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center justify-center gap-1.5 w-full">
                 <p className="text-sm text-muted-foreground">Duration</p>
                 <span className="text-sm text-muted-foreground">·</span>
                 <p className="text-sm text-muted-foreground">
                   Ended at <span className="font-medium text-foreground">{endsAtStr}</span>
                 </p>
               </div>
-              <div className="flex gap-2 justify-center overflow-x-auto w-full pb-1 scrollbar-none">
+              <div className="flex gap-2 overflow-x-auto w-full pb-1 scrollbar-none" style={{WebkitOverflowScrolling: 'touch'}}>
                 {DURATION_OPTIONS.map((mins) => (
                   <button
                     key={mins}
