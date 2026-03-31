@@ -137,12 +137,12 @@ export default function FeedConfirmPopover({
 
             {/* Duration tags */}
             <div className="space-y-2">
-              <div className="flex items-center gap-1.5 px-1">
+              <div className="flex items-center justify-center gap-1.5">
                 <p className="text-sm text-muted-foreground">Duration</p>
                 <span className="text-sm text-muted-foreground">·</span>
                 <p className="text-sm text-muted-foreground">Ended at <span className="font-medium text-foreground">{endsAtStr}</span></p>
               </div>
-              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none -mx-6 px-6">
+              <div className="flex gap-2 justify-center overflow-x-auto pb-1 scrollbar-none">
                 {DURATION_OPTIONS.map((mins) => (
                   <button
                     key={mins}

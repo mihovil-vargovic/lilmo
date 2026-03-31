@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import TabBar from '@/components/layout/TabBar'
-import RoomCode from '@/components/shared/RoomCode'
 import SwitchRoomModal from '@/components/shared/SwitchRoomModal'
 
 interface RoomLayoutProps {
@@ -26,15 +25,12 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
       <div className="sticky top-0 z-20 bg-background">
         <div className="h-12 flex items-center justify-between px-4 border-b border-border">
           <span className="text-xl font-semibold tracking-tight">Lilmo</span>
-          <div className="flex items-center gap-2">
-            <RoomCode code={code} />
-            <button
-              onClick={() => setSwitchOpen(true)}
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Switch room
-            </button>
-          </div>
+          <button
+            onClick={() => setSwitchOpen(true)}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Switch room
+          </button>
         </div>
         <TabBar code={code} />
       </div>
