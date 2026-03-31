@@ -109,7 +109,7 @@ export default function SwitchRoomModal({
       <div className="space-y-6">
         {/* Current room */}
         <div className="space-y-2">
-          <p className="text-sm text-muted-foreground">Your room code</p>
+          <p className="text-sm font-medium">Your current room code</p>
           <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-muted">
             <span className="text-2xl font-mono font-semibold tracking-[0.3em]">
               {currentCode}
@@ -133,40 +133,38 @@ export default function SwitchRoomModal({
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="flex items-center gap-3">
-          <div className="flex-1 h-px bg-border" />
-          <span className="text-xs text-muted-foreground font-medium">or join another room</span>
-          <div className="flex-1 h-px bg-border" />
+        {/* Join another room */}
+        <div className="space-y-2">
+          <p className="text-sm font-medium">Join another room</p>
+          <div className="border border-border rounded-xl p-4">
+            <form onSubmit={handleJoin} className="space-y-3">
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={6}
+                value={joinCode}
+                onChange={(e) => {
+                  setJoinCode(e.target.value.replace(/\D/g, ''))
+                  setJoinError('')
+                }}
+                placeholder="123456"
+                className="w-full px-3 py-2 text-center text-2xl font-mono tracking-[0.4em] border border-input focus:border-primary rounded-xl outline-none transition-colors bg-background"
+              />
+              {joinError && (
+                <p className="text-sm text-destructive">{joinError}</p>
+              )}
+              <Button
+                type="submit"
+                variant={codeReady ? 'default' : 'outline'}
+                disabled={joining || !codeReady}
+                className="w-full h-11"
+              >
+                {joining ? 'Joining…' : 'Join room'}
+              </Button>
+            </form>
+          </div>
         </div>
-
-        {/* Join room */}
-        <form onSubmit={handleJoin} className="space-y-3">
-          <input
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            maxLength={6}
-            value={joinCode}
-            onChange={(e) => {
-              setJoinCode(e.target.value.replace(/\D/g, ''))
-              setJoinError('')
-            }}
-            placeholder="123456"
-            className="w-full px-3 py-2 text-center text-2xl font-mono tracking-[0.4em] border border-input focus:border-primary rounded-xl outline-none transition-colors bg-background"
-          />
-          {joinError && (
-            <p className="text-sm text-destructive">{joinError}</p>
-          )}
-          <Button
-            type="submit"
-            variant={codeReady ? 'default' : 'outline'}
-            disabled={joining || !codeReady}
-            className="w-full h-11"
-          >
-            {joining ? 'Joining…' : 'Join room'}
-          </Button>
-        </form>
 
         {/* Cancel */}
         <Button
