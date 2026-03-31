@@ -114,17 +114,17 @@ export default function SwitchRoomModal({
             <span className="text-2xl font-mono font-semibold tracking-[0.3em]">
               {currentCode}
             </span>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center">
               <button
                 onClick={handleCopy}
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="w-11 h-11 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
                 title="Copy code"
               >
                 <CopyIcon checked={copied} />
               </button>
               <button
                 onClick={handleShare}
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="w-11 h-11 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
                 title="Share"
               >
                 <ShareIcon />
