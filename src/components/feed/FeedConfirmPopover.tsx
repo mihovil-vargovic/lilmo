@@ -96,72 +96,75 @@ export default function FeedConfirmPopover({
           </Tabs>
         )}
 
-        {/* Bottle content */}
-        {(editEntry || feedType === 'bottle') && (
-          <div className="space-y-5">
-            <div className="flex items-center justify-center py-4">
-              <TimePicker value={time} onChange={setTime} />
-            </div>
+        {/* Content — fixed height to prevent sheet resize on tab switch */}
+        <div className="h-[220px] flex flex-col justify-center">
+          {/* Bottle content */}
+          {(editEntry || feedType === 'bottle') && (
+            <div className="space-y-5">
+              <div className="flex items-center justify-center py-4">
+                <TimePicker value={time} onChange={setTime} />
+              </div>
 
-            {!editEntry && (
+              {!editEntry && (
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground text-center">Amount</p>
+                  <div className="flex gap-2 justify-center flex-wrap">
+                    {AMOUNT_OPTIONS.map((ml) => (
+                      <button
+                        key={ml}
+                        type="button"
+                        onClick={() => setAmountMl(ml)}
+                        className={cn(
+                          'px-4 py-2 rounded-full text-sm font-medium transition-colors',
+                          amountMl === ml
+                            ? 'bg-primary text-primary-foreground'
+                            : 'border border-border bg-background text-foreground'
+                        )}
+                      >
+                        {ml}ml
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Boobies content */}
+          {!editEntry && feedType === 'boobies' && (
+            <div className="space-y-5">
+              <div className="flex items-center justify-center py-4">
+                <TimePicker value={time} onChange={setTime} />
+              </div>
+
+              {/* Duration tags */}
               <div className="space-y-2">
-                <p className="text-sm text-muted-foreground text-center">Amount</p>
-                <div className="flex gap-2 justify-center flex-wrap">
-                  {AMOUNT_OPTIONS.map((ml) => (
+                <div className="flex items-center justify-center gap-1.5">
+                  <p className="text-sm text-muted-foreground">Duration</p>
+                  <span className="text-sm text-muted-foreground">·</span>
+                  <p className="text-sm text-muted-foreground">Ended at <span className="font-medium text-foreground">{endsAtStr}</span></p>
+                </div>
+                <div className="flex gap-2 justify-center overflow-x-auto pb-1 scrollbar-none">
+                  {DURATION_OPTIONS.map((mins) => (
                     <button
-                      key={ml}
+                      key={mins}
                       type="button"
-                      onClick={() => setAmountMl(ml)}
+                      onClick={() => setDurationMinutes(mins)}
                       className={cn(
-                        'px-4 py-2 rounded-full text-sm font-medium transition-colors',
-                        amountMl === ml
+                        'flex-none px-4 py-2 rounded-full text-sm font-medium transition-colors',
+                        durationMinutes === mins
                           ? 'bg-primary text-primary-foreground'
                           : 'border border-border bg-background text-foreground'
                       )}
                     >
-                      {ml}ml
+                      {mins}min
                     </button>
                   ))}
                 </div>
               </div>
-            )}
-          </div>
-        )}
-
-        {/* Boobies content */}
-        {!editEntry && feedType === 'boobies' && (
-          <div className="space-y-5">
-            <div className="flex items-center justify-center py-4">
-              <TimePicker value={time} onChange={setTime} />
             </div>
-
-            {/* Duration tags */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-center gap-1.5">
-                <p className="text-sm text-muted-foreground">Duration</p>
-                <span className="text-sm text-muted-foreground">·</span>
-                <p className="text-sm text-muted-foreground">Ended at <span className="font-medium text-foreground">{endsAtStr}</span></p>
-              </div>
-              <div className="flex gap-2 justify-center overflow-x-auto pb-1 scrollbar-none">
-                {DURATION_OPTIONS.map((mins) => (
-                  <button
-                    key={mins}
-                    type="button"
-                    onClick={() => setDurationMinutes(mins)}
-                    className={cn(
-                      'flex-none px-4 py-2 rounded-full text-sm font-medium transition-colors',
-                      durationMinutes === mins
-                        ? 'bg-primary text-primary-foreground'
-                        : 'border border-border bg-background text-foreground'
-                    )}
-                  >
-                    {mins}min
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
 
         <div className="flex gap-3">
           <Button
