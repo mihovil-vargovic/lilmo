@@ -12,6 +12,31 @@ interface SwitchRoomModalProps {
   currentCode: string
 }
 
+function CopyIcon({ checked }: { checked: boolean }) {
+  if (checked) {
+    return (
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M3 9l4 4 8-8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    )
+  }
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <rect x="2" y="5" width="10" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M6 5V3.5A1.5 1.5 0 017.5 2h7A1.5 1.5 0 0116 3.5v10A1.5 1.5 0 0114.5 15H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function ShareIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M9 2v10M5 6l4-4 4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3 13v2a1 1 0 001 1h10a1 1 0 001-1v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 export default function SwitchRoomModal({
   open,
   onClose,
@@ -40,6 +65,18 @@ export default function SwitchRoomModal({
     }
   }
 
+  const handleShare = async () => {
+    try {
+      await navigator.share({
+        title: 'Join my Lilmo room',
+        text: `Join my Lilmo baby tracking room with code: ${currentCode}`,
+        url: `${window.location.origin}/room/${currentCode}/feed`,
+      })
+    } catch {
+      // user dismissed or not supported
+    }
+  }
+
   const saveRoom = (code: string) => {
     localStorage.setItem('lilmo_room', code)
     document.cookie = `lilmo_room=${code}; path=/; max-age=31536000`
@@ -65,23 +102,35 @@ export default function SwitchRoomModal({
     onClose()
   }
 
+  const codeReady = joinCode.length === 6
+
   return (
     <BottomSheet open={open} onClose={onClose} title="Switch room">
       <div className="space-y-6">
         {/* Current room */}
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground">Your room code</p>
-          <button
-            onClick={handleCopy}
-            className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-muted hover:bg-secondary transition-colors"
-          >
+          <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-muted">
             <span className="text-2xl font-mono font-semibold tracking-[0.3em]">
               {currentCode}
             </span>
-            <span className="text-sm text-muted-foreground">
-              {copied ? 'Copied!' : 'Copy'}
-            </span>
-          </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleCopy}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                title="Copy code"
+              >
+                <CopyIcon checked={copied} />
+              </button>
+              <button
+                onClick={handleShare}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                title="Share"
+              >
+                <ShareIcon />
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Divider */}
@@ -111,8 +160,8 @@ export default function SwitchRoomModal({
           )}
           <Button
             type="submit"
-            variant="outline"
-            disabled={joining || joinCode.length !== 6}
+            variant={codeReady ? 'default' : 'outline'}
+            disabled={joining || !codeReady}
             className="w-full h-11"
           >
             {joining ? 'Joining…' : 'Join room'}
