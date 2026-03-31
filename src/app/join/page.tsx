@@ -56,9 +56,8 @@ export default function JoinPage() {
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm space-y-6">
         {/* Header */}
-        <div className="text-center space-y-1">
-          <h1 className="text-lg font-semibold tracking-tight">Lilmo</h1>
-          <p className="text-sm text-muted-foreground">Baby tracking made simple</p>
+        <div className="text-center">
+          <h1 className="text-4xl font-semibold tracking-tight">Lilmo</h1>
         </div>
 
         {/* Create room */}
@@ -66,7 +65,7 @@ export default function JoinPage() {
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">New room</CardTitle>
             <CardDescription className="text-sm text-muted-foreground">
-              Start tracking. Share the code with your partner.
+              Create a room and share the code with your partner.
             </CardDescription>
           </CardHeader>
           <CardContent>
