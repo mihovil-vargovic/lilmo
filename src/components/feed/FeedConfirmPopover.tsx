@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import BottomSheet from '@/components/shared/BottomSheet'
 import TimePicker from '@/components/shared/TimePicker'
 import { Button } from '@/components/ui/button'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { roundToNearest5 } from '@/lib/timeUtils'
 import { cn } from '@/lib/utils'
 
@@ -34,11 +34,7 @@ export default function FeedConfirmPopover({
 
   useEffect(() => {
     if (open) {
-      if (editEntry) {
-        setTime(new Date(editEntry.logged_at))
-      } else {
-        setTime(roundToNearest5(new Date()))
-      }
+      setTime(editEntry ? new Date(editEntry.logged_at) : roundToNearest5(new Date()))
       setFeedType('bottle')
       setDurationMinutes(15)
       setAmountMl(20)
@@ -46,10 +42,7 @@ export default function FeedConfirmPopover({
   }, [open, editEntry])
 
   const endsAt = new Date(time.getTime() + durationMinutes * 60 * 1000)
-  const endsAtStr = endsAt.toLocaleTimeString('en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
-  })
+  const endsAtStr = endsAt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
 
   const handleConfirm = async () => {
     setSaving(true)
@@ -73,110 +66,95 @@ export default function FeedConfirmPopover({
   }
 
   return (
-    <BottomSheet
-      open={open}
-      onClose={onClose}
-      title={editEntry ? 'Edit food' : 'Add food'}
-    >
-      <div className="space-y-6">
-        {/* Segment control — only show when adding, not editing */}
+    <BottomSheet open={open} onClose={onClose} title={editEntry ? 'Edit food' : 'Add food'}>
+      <div className="flex flex-col gap-6">
+
+        {/* Segment control */}
         {!editEntry && (
-          <Tabs
-            value={feedType}
-            onValueChange={(v) => setFeedType(v as 'bottle' | 'boobies')}
-          >
+          <Tabs value={feedType} onValueChange={(v) => setFeedType(v as 'bottle' | 'boobies')}>
             <TabsList className="w-full">
-              <TabsTrigger value="bottle" className="flex-1">
-                Bottle
-              </TabsTrigger>
-              <TabsTrigger value="boobies" className="flex-1">
-                Boobies
-              </TabsTrigger>
+              <TabsTrigger value="bottle" className="flex-1">Bottle</TabsTrigger>
+              <TabsTrigger value="boobies" className="flex-1">Boobies</TabsTrigger>
             </TabsList>
           </Tabs>
         )}
 
-        {/* Content — fixed height, both panels always mounted so modal never resizes */}
-        <div className="h-[230px] relative overflow-hidden">
-          {/* Bottle content */}
-          <div className={cn('absolute inset-0 flex flex-col justify-center space-y-5', feedType === 'boobies' && !editEntry ? 'invisible' : '')}>
-            <div className="flex items-center justify-center py-4">
-              <TimePicker value={time} onChange={setTime} />
-            </div>
-            {!editEntry && (
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground text-center">Amount</p>
-                <div className="flex gap-2 justify-center flex-wrap">
-                  {AMOUNT_OPTIONS.map((ml) => (
-                    <button
-                      key={ml}
-                      type="button"
-                      onClick={() => setAmountMl(ml)}
-                      className={cn(
-                        'px-4 py-2 rounded-full text-sm font-medium transition-colors',
-                        amountMl === ml
-                          ? 'bg-primary text-primary-foreground'
-                          : 'border border-border bg-background text-foreground'
-                      )}
-                    >
-                      {ml}ml
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Boobies content */}
-          {!editEntry && (
-            <div className={cn('absolute inset-0 flex flex-col justify-center space-y-5', feedType !== 'boobies' ? 'invisible' : '')}>
-              <div className="flex items-center justify-center py-4">
-                <TimePicker value={time} onChange={setTime} />
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-center gap-1.5">
-                  <p className="text-sm text-muted-foreground">Duration</p>
-                  <span className="text-sm text-muted-foreground">·</span>
-                  <p className="text-sm text-muted-foreground">Ended at <span className="font-medium text-foreground">{endsAtStr}</span></p>
-                </div>
-                <div className="flex gap-2 justify-center overflow-x-auto pb-1 scrollbar-none">
-                  {DURATION_OPTIONS.map((mins) => (
-                    <button
-                      key={mins}
-                      type="button"
-                      onClick={() => setDurationMinutes(mins)}
-                      className={cn(
-                        'flex-none px-4 py-2 rounded-full text-sm font-medium transition-colors',
-                        durationMinutes === mins
-                          ? 'bg-primary text-primary-foreground'
-                          : 'border border-border bg-background text-foreground'
-                      )}
-                    >
-                      {mins}min
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+        {/* Time picker — shared, always visible */}
+        <div className="flex items-center justify-center">
+          <TimePicker value={time} onChange={setTime} />
         </div>
 
+        {/* Options — overlapping grid so height never shifts */}
+        {!editEntry && (
+          <div className="grid">
+            {/* Bottle: amount */}
+            <div className={cn(
+              'col-start-1 row-start-1 flex flex-col items-center gap-3',
+              feedType !== 'bottle' && 'invisible pointer-events-none'
+            )}>
+              <p className="text-sm text-muted-foreground">Amount</p>
+              <div className="flex gap-2 justify-center flex-wrap">
+                {AMOUNT_OPTIONS.map((ml) => (
+                  <button
+                    key={ml}
+                    type="button"
+                    onClick={() => setAmountMl(ml)}
+                    className={cn(
+                      'px-4 py-2 rounded-full text-sm font-medium transition-colors',
+                      amountMl === ml
+                        ? 'bg-primary text-primary-foreground'
+                        : 'border border-border bg-background text-foreground'
+                    )}
+                  >
+                    {ml}ml
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Boobies: duration */}
+            <div className={cn(
+              'col-start-1 row-start-1 flex flex-col items-center gap-3',
+              feedType !== 'boobies' && 'invisible pointer-events-none'
+            )}>
+              <div className="flex items-center gap-1.5">
+                <p className="text-sm text-muted-foreground">Duration</p>
+                <span className="text-sm text-muted-foreground">·</span>
+                <p className="text-sm text-muted-foreground">
+                  Ended at <span className="font-medium text-foreground">{endsAtStr}</span>
+                </p>
+              </div>
+              <div className="flex gap-2 justify-center overflow-x-auto w-full pb-1 scrollbar-none">
+                {DURATION_OPTIONS.map((mins) => (
+                  <button
+                    key={mins}
+                    type="button"
+                    onClick={() => setDurationMinutes(mins)}
+                    className={cn(
+                      'flex-none px-4 py-2 rounded-full text-sm font-medium transition-colors',
+                      durationMinutes === mins
+                        ? 'bg-primary text-primary-foreground'
+                        : 'border border-border bg-background text-foreground'
+                    )}
+                  >
+                    {mins}min
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Buttons */}
         <div className="flex gap-3">
-          <Button
-            variant="outline"
-            className="flex-1 h-11"
-            onClick={onClose}
-          >
+          <Button variant="outline" className="flex-1 h-11" onClick={onClose}>
             Cancel
           </Button>
-          <Button
-            className="flex-1 h-11"
-            onClick={handleConfirm}
-            disabled={saving}
-          >
+          <Button className="flex-1 h-11" onClick={handleConfirm} disabled={saving}>
             {saving ? 'Saving…' : editEntry ? 'Update' : 'Confirm'}
           </Button>
         </div>
+
       </div>
     </BottomSheet>
   )
