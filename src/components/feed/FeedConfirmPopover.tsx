@@ -96,48 +96,43 @@ export default function FeedConfirmPopover({
           </Tabs>
         )}
 
-        {/* Content — fixed height to prevent sheet resize on tab switch */}
-        <div className="h-[220px] flex flex-col justify-center">
+        {/* Content — fixed height, both panels always mounted so modal never resizes */}
+        <div className="h-[230px] relative overflow-hidden">
           {/* Bottle content */}
-          {(editEntry || feedType === 'bottle') && (
-            <div className="space-y-5">
-              <div className="flex items-center justify-center py-4">
-                <TimePicker value={time} onChange={setTime} />
-              </div>
-
-              {!editEntry && (
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground text-center">Amount</p>
-                  <div className="flex gap-2 justify-center flex-wrap">
-                    {AMOUNT_OPTIONS.map((ml) => (
-                      <button
-                        key={ml}
-                        type="button"
-                        onClick={() => setAmountMl(ml)}
-                        className={cn(
-                          'px-4 py-2 rounded-full text-sm font-medium transition-colors',
-                          amountMl === ml
-                            ? 'bg-primary text-primary-foreground'
-                            : 'border border-border bg-background text-foreground'
-                        )}
-                      >
-                        {ml}ml
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+          <div className={cn('absolute inset-0 flex flex-col justify-center space-y-5', feedType === 'boobies' && !editEntry ? 'invisible' : '')}>
+            <div className="flex items-center justify-center py-4">
+              <TimePicker value={time} onChange={setTime} />
             </div>
-          )}
+            {!editEntry && (
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground text-center">Amount</p>
+                <div className="flex gap-2 justify-center flex-wrap">
+                  {AMOUNT_OPTIONS.map((ml) => (
+                    <button
+                      key={ml}
+                      type="button"
+                      onClick={() => setAmountMl(ml)}
+                      className={cn(
+                        'px-4 py-2 rounded-full text-sm font-medium transition-colors',
+                        amountMl === ml
+                          ? 'bg-primary text-primary-foreground'
+                          : 'border border-border bg-background text-foreground'
+                      )}
+                    >
+                      {ml}ml
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Boobies content */}
-          {!editEntry && feedType === 'boobies' && (
-            <div className="space-y-5">
+          {!editEntry && (
+            <div className={cn('absolute inset-0 flex flex-col justify-center space-y-5', feedType !== 'boobies' ? 'invisible' : '')}>
               <div className="flex items-center justify-center py-4">
                 <TimePicker value={time} onChange={setTime} />
               </div>
-
-              {/* Duration tags */}
               <div className="space-y-2">
                 <div className="flex items-center justify-center gap-1.5">
                   <p className="text-sm text-muted-foreground">Duration</p>
