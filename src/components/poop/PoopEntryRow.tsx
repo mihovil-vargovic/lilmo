@@ -1,7 +1,6 @@
 'use client'
 
 import SwipeableRow from '@/components/shared/SwipeableRow'
-import { Badge } from '@/components/ui/badge'
 import { PoopEntry, PoopType } from '@/types'
 
 interface PoopEntryRowProps {
@@ -43,9 +42,9 @@ export default function PoopEntryRow({
         <span className="text-sm font-semibold tabular-nums">
           {time}
         </span>
-        <Badge variant="outline">
+        <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
           {config.label}
-        </Badge>
+        </span>
       </div>
     </SwipeableRow>
   )
