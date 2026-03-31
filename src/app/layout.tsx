@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: 'Lilmo',
   description: 'Baby tracking made simple',
   manifest: '/manifest.json',
+  icons: {
+    apple: '/icons/apple-touch-icon.png',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
