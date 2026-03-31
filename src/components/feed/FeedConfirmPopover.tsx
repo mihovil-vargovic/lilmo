@@ -93,14 +93,14 @@ export default function FeedConfirmPopover({
               feedType !== 'bottle' && 'invisible pointer-events-none'
             )}>
               <p className="text-sm text-muted-foreground">Amount</p>
-              <div className="flex gap-2 overflow-x-auto w-full pb-1 scrollbar-none" style={{WebkitOverflowScrolling: 'touch'}}>
+              <div className="flex gap-2 justify-center flex-wrap">
                 {AMOUNT_OPTIONS.map((ml) => (
                   <button
                     key={ml}
                     type="button"
                     onClick={() => setAmountMl(ml)}
                     className={cn(
-                      'flex-none px-4 py-2 rounded-full text-sm font-medium transition-colors',
+                      'px-4 py-2 rounded-full text-sm font-medium transition-colors',
                       amountMl === ml
                         ? 'bg-primary text-primary-foreground'
                         : 'border border-border bg-background text-foreground'
