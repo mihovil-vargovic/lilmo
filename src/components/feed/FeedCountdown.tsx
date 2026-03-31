@@ -63,10 +63,10 @@ export default function FeedCountdown({ loggedAt, isLatest }: FeedCountdownProps
 
   return (
     <div className="flex items-center gap-1.5 text-blue-500">
-      <CountdownRing progress={progress} />
       <span className="text-xs font-medium">
         Next in {formatCountdown(remaining)}
       </span>
+      <CountdownRing progress={progress} />
     </div>
   )
 }
