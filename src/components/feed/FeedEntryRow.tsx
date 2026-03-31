@@ -28,9 +28,12 @@ export default function FeedEntryRow({
   return (
     <SwipeableRow onEdit={() => onEdit(entry)} onDelete={() => onDelete(entry.id)}>
       <div className="flex items-center justify-between px-4 py-3.5 bg-background">
-        <span className="text-sm font-semibold tabular-nums">
-          {time}
-        </span>
+        <div className="flex items-center gap-2.5">
+          <span className="text-sm font-semibold tabular-nums">
+            {time}
+          </span>
+          <FeedCountdown loggedAt={entry.logged_at} isLatest={isLatest} />
+        </div>
         <div className="flex items-center gap-2">
           {entry.feed_type === 'bottle' && entry.amount_ml != null && (
             <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
@@ -45,7 +48,6 @@ export default function FeedEntryRow({
           <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
             {feedLabel}
           </span>
-          <FeedCountdown loggedAt={entry.logged_at} isLatest={isLatest} />
         </div>
       </div>
     </SwipeableRow>
