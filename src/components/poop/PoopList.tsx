@@ -60,13 +60,17 @@ export default function PoopList({
         <div className="pb-28">
           {groups.map((group) => (
             <DayGroup key={group.date} label={group.label}>
-              {group.entries.map((entry) => (
-                <PoopEntryRow
-                  key={entry.id}
-                  entry={entry}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                />
+              {group.entries.map((entry, entryIndex) => (
+                <div key={entry.id}>
+                  <PoopEntryRow
+                    entry={entry}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                  {entryIndex < group.entries.length - 1 && (
+                    <div className="h-px bg-border mx-4" />
+                  )}
+                </div>
               ))}
             </DayGroup>
           ))}

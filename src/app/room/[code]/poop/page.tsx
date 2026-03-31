@@ -19,7 +19,7 @@ export default function PoopPage({ params }: PoopPageProps) {
         showPopover={showPopover}
         onClosePopover={() => setShowPopover(false)}
       />
-      <StickyAddButton onClick={() => setShowPopover(true)} label="Add Diaper" />
+      <StickyAddButton onClick={() => setShowPopover(true)} label="Add diaper" />
     </>
   )
 }

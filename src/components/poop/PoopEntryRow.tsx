@@ -39,7 +39,7 @@ export default function PoopEntryRow({
       onEdit={() => onEdit(entry)}
       onDelete={() => onDelete(entry.id)}
     >
-      <div className="flex items-center justify-between px-4 py-3.5 border-b border-border last:border-0 bg-background">
+      <div className="flex items-center justify-between px-4 py-3.5 bg-background">
         <span className="text-sm font-semibold tabular-nums">
           {time}
         </span>

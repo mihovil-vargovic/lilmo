@@ -58,15 +58,20 @@ export default function FeedList({
         </div>
       ) : (
         <div className="pb-28">
-          {groups.map((group) => (
+          {groups.map((group, groupIndex) => (
             <DayGroup key={group.date} label={group.label}>
-              {group.entries.map((entry) => (
-                <FeedEntryRow
-                  key={entry.id}
-                  entry={entry}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                />
+              {group.entries.map((entry, entryIndex) => (
+                <div key={entry.id}>
+                  <FeedEntryRow
+                    entry={entry}
+                    isLatest={groupIndex === 0 && entryIndex === 0}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                  {entryIndex < group.entries.length - 1 && (
+                    <div className="h-px bg-border mx-4" />
+                  )}
+                </div>
               ))}
             </DayGroup>
           ))}

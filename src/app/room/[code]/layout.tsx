@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect } from 'react'
-import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import TabBar from '@/components/layout/TabBar'
 import RoomCode from '@/components/shared/RoomCode'
+import SwitchRoomModal from '@/components/shared/SwitchRoomModal'
 
 interface RoomLayoutProps {
   children: React.ReactNode
@@ -12,6 +12,7 @@ interface RoomLayoutProps {
 
 export default function RoomLayout({ children, params }: RoomLayoutProps) {
   const { code } = params
+  const [switchOpen, setSwitchOpen] = useState(false)
 
   // Auto-save room code when visiting the URL directly (e.g. shared link)
   useEffect(() => {
@@ -24,15 +25,15 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
       {/* Sticky header + tabs */}
       <div className="sticky top-0 z-20 bg-background">
         <div className="h-12 flex items-center justify-between px-4 border-b border-border">
-          <span className="text-lg font-semibold tracking-tight">Lilmo</span>
+          <span className="text-xl font-semibold tracking-tight">Lilmo</span>
           <div className="flex items-center gap-2">
             <RoomCode code={code} />
-            <Link
-              href="/join"
+            <button
+              onClick={() => setSwitchOpen(true)}
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              Switch
-            </Link>
+              Switch room
+            </button>
           </div>
         </div>
         <TabBar code={code} />
@@ -42,6 +43,12 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
       <div className="flex-1 relative">
         {children}
       </div>
+
+      <SwitchRoomModal
+        open={switchOpen}
+        onClose={() => setSwitchOpen(false)}
+        currentCode={code}
+      />
     </div>
   )
 }

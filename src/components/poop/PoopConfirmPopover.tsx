@@ -69,7 +69,7 @@ export default function PoopConfirmPopover({
     <BottomSheet
       open={open}
       onClose={onClose}
-      title={editEntry ? 'Edit Diaper' : 'Add Diaper'}
+      title={editEntry ? 'Edit diaper' : 'Add diaper'}
     >
       <div className="space-y-7">
         {/* Type selection — only when adding */}
@@ -100,13 +100,13 @@ export default function PoopConfirmPopover({
         <div className="flex gap-3">
           <Button
             variant="outline"
-            className="flex-1"
+            className="flex-1 h-11"
             onClick={onClose}
           >
             Cancel
           </Button>
           <Button
-            className="flex-1"
+            className="flex-1 h-11"
             onClick={handleConfirm}
             disabled={saving}
           >

@@ -19,7 +19,7 @@ export default function FeedPage({ params }: FeedPageProps) {
         showPopover={showPopover}
         onClosePopover={() => setShowPopover(false)}
       />
-      <StickyAddButton onClick={() => setShowPopover(true)} label="Add Food" />
+      <StickyAddButton onClick={() => setShowPopover(true)} label="Add food" />
     </>
   )
 }

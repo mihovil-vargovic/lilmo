@@ -13,7 +13,7 @@ export default function TabBar({ code }: TabBarProps) {
   const activeTab = pathname.includes('/poop') ? 'poop' : 'feed'
 
   return (
-    <div className="border-b border-border bg-background px-2 pt-1">
+    <div className="bg-background px-4 py-2">
       <Tabs value={activeTab}>
         <TabsList className="w-full">
           <TabsTrigger

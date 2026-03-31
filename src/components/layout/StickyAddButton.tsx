@@ -25,7 +25,7 @@ export default function StickyAddButton({
     >
       <Button
         onClick={onClick}
-        className="rounded-full h-12 px-8 shadow-md"
+        className="rounded-full h-12 w-36 shadow-md"
       >
         {label}
       </Button>
