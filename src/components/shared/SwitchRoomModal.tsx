@@ -160,7 +160,7 @@ export default function SwitchRoomModal({
                 disabled={joining || !codeReady}
                 className="w-full h-11"
               >
-                {joining ? 'Joining…' : 'Join Spouse'}
+                {joining ? 'Joining…' : 'Join'}
               </Button>
             </form>
           </div>
@@ -168,8 +168,8 @@ export default function SwitchRoomModal({
 
         {/* Cancel */}
         <Button
-          variant="ghost"
-          className="w-full h-11 text-muted-foreground"
+          variant="outline"
+          className="w-full h-11"
           onClick={onClose}
         >
           Cancel
