@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import TabBar from '@/components/layout/TabBar'
 import SwitchRoomModal from '@/components/shared/SwitchRoomModal'
+import { Toaster } from 'sonner'
 
 interface RoomLayoutProps {
   children: React.ReactNode
@@ -45,6 +46,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
         onClose={() => setSwitchOpen(false)}
         currentCode={code}
       />
+      <Toaster position="top-center" richColors />
     </div>
   )
 }

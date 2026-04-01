@@ -97,24 +97,22 @@ export default function FeedConfirmPopover({
         )}
 
         {/* Time picker — shared, always visible */}
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center">
+          <div className="flex items-center gap-4">
           <TimePicker value={time} onChange={setTime} />
-          <button
-            type="button"
-            onClick={() => dateInputRef.current?.showPicker()}
-            className="w-11 h-11 flex items-center justify-center rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
-            aria-label="Pick date"
-          >
-            <CalendarDays className="w-5 h-5" />
-          </button>
-          <input
-            ref={dateInputRef}
-            type="date"
-            value={toDateInputValue(time)}
-            onChange={handleDateChange}
-            className="sr-only"
-            tabIndex={-1}
-          />
+          <div className="relative w-11 h-11">
+            <div className="w-11 h-11 flex items-center justify-center rounded-full border border-border text-muted-foreground pointer-events-none">
+              <CalendarDays className="w-5 h-5" />
+            </div>
+            <input
+              ref={dateInputRef}
+              type="date"
+              value={toDateInputValue(time)}
+              onChange={handleDateChange}
+              className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
+            />
+          </div>
+          </div>
         </div>
 
         {/* Options — overlapping grid so height never shifts */}
@@ -126,14 +124,14 @@ export default function FeedConfirmPopover({
               feedType !== 'bottle' && 'invisible pointer-events-none'
             )}>
               <p className="text-sm text-muted-foreground">Amount</p>
-              <div className="flex gap-2 justify-center flex-wrap">
+              <div className="flex gap-2 overflow-x-auto w-full pb-1 scrollbar-none [touch-action:pan-x]">
                 {AMOUNT_OPTIONS.map((ml) => (
                   <button
                     key={ml}
                     type="button"
                     onClick={() => setAmountMl(ml)}
                     className={cn(
-                      'px-4 py-2 rounded-full text-sm font-medium transition-colors',
+                      'flex-none px-4 py-2 rounded-full text-sm font-medium transition-colors',
                       amountMl === ml
                         ? 'bg-primary text-primary-foreground'
                         : 'border border-border bg-background text-foreground'

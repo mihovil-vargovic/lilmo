@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { groupByDay } from '@/lib/timeUtils'
 import DayGroup from '@/components/shared/DayGroup'
 import FeedEntryRow from './FeedEntryRow'
@@ -36,6 +37,12 @@ export default function FeedList({
 
   const handleDelete = async (id: string) => {
     await deleteEntry(id)
+    toast.success('Entry deleted')
+  }
+
+  const handleUpdate = async (id: string, loggedAt: Date) => {
+    await updateEntry(id, loggedAt)
+    toast.success('Entry updated')
   }
 
   const groups = groupByDay(entries)
@@ -99,7 +106,7 @@ export default function FeedList({
         }}
         onConfirm={addEntry}
         editEntry={editEntry}
-        onUpdate={updateEntry}
+        onUpdate={handleUpdate}
       />
     </>
   )

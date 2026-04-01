@@ -26,10 +26,10 @@ export default function BottomSheet({
         side="bottom"
         className="px-0 pb-0 pt-[10px] max-h-[90vh] overflow-y-auto [touch-action:pan-y]"
       >
-        <SheetHeader className="px-4 pb-4 border-b border-border text-left flex-row items-center justify-between pr-14 pt-0">
+        <SheetHeader className="px-4 pb-2 border-b border-border text-left flex-row items-center justify-between pr-14 pt-0">
           <SheetTitle className="text-lg font-semibold leading-[44px]">{title}</SheetTitle>
         </SheetHeader>
-        <div className="p-4 pb-safe">{children}</div>
+        <div className="px-4 py-3 pb-safe">{children}</div>
       </SheetContent>
     </Sheet>
   )

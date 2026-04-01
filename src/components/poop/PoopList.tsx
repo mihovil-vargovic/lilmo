@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { usePoopEntries } from '@/hooks/usePoopEntries'
 import { groupByDay } from '@/lib/timeUtils'
 import DayGroup from '@/components/shared/DayGroup'
@@ -31,6 +32,12 @@ export default function PoopList({
 
   const handleDelete = async (id: string) => {
     await deleteEntry(id)
+    toast.success('Entry deleted')
+  }
+
+  const handleUpdate = async (id: string, loggedAt: Date) => {
+    await updateEntry(id, loggedAt)
+    toast.success('Entry updated')
   }
 
   const groups = groupByDay(entries)
@@ -93,7 +100,7 @@ export default function PoopList({
         }}
         onConfirm={addEntry}
         editEntry={editEntry}
-        onUpdate={updateEntry}
+        onUpdate={handleUpdate}
       />
     </>
   )

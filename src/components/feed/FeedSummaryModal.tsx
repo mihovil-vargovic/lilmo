@@ -49,9 +49,11 @@ function buildSummary(entries: FeedEntry[], date: Date, today: Date): DaySummary
   }
 }
 
-function SummaryCard({ s }: { s: DaySummary }) {
+function SummaryCard({ s, isToday }: { s: DaySummary; isToday?: boolean }) {
   const boobiesPct = s.total > 0 ? Math.round((s.boobiesCount / s.total) * 100) : 0
   const bottlePct = s.total > 0 ? 100 - boobiesPct : 0
+  const valueClass = isToday ? 'text-2xl font-semibold' : 'text-sm font-medium pl-3.5'
+  const labelClass = isToday ? 'text-xs text-muted-foreground' : 'text-xs text-muted-foreground'
 
   return (
     <div className="rounded-xl border border-border p-4 flex flex-col gap-3">
@@ -77,7 +79,7 @@ function SummaryCard({ s }: { s: DaySummary }) {
                   <span className="w-2 h-2 rounded-full bg-pink-400 shrink-0" />
                   <span className="text-xs text-muted-foreground">Boobies {boobiesPct}%</span>
                 </div>
-                <span className="text-sm font-medium pl-3.5">{s.boobiesMinutes}m total</span>
+                <span className={valueClass}>{s.boobiesMinutes} min total</span>
               </div>
             )}
             {s.bottleCount > 0 && (
@@ -86,9 +88,10 @@ function SummaryCard({ s }: { s: DaySummary }) {
                   <span className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />
                   <span className="text-xs text-muted-foreground">Bottle {bottlePct}%</span>
                 </div>
-                <span className="text-sm font-medium pl-3.5">{s.bottleMl} ml total</span>
+                <span className={valueClass}>{s.bottleMl} ml total</span>
               </div>
             )}
+
           </div>
         </>
       )}
@@ -107,7 +110,7 @@ export default function FeedSummaryModal({ open, onClose, entries }: FeedSummary
   return (
     <BottomSheet open={open} onClose={onClose} title="Summary">
       <div className="flex flex-col gap-3">
-        <SummaryCard s={todaySummary} />
+        <SummaryCard s={todaySummary} isToday />
         <SummaryCard s={yesterdaySummary} />
         <Button variant="outline" className="w-full h-11 mt-1" onClick={onClose}>
           Close

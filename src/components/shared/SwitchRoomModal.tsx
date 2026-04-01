@@ -68,8 +68,8 @@ export default function SwitchRoomModal({
   const handleShare = async () => {
     try {
       await navigator.share({
-        title: 'Join my Lilmo room',
-        text: `Join my Lilmo baby tracking room with code: ${currentCode}`,
+        title: 'Join me on Lilmo',
+        text: `Join my Lilmo baby tracking with Spouse ID: ${currentCode}`,
         url: `${window.location.origin}/room/${currentCode}/feed`,
       })
     } catch {
@@ -105,11 +105,11 @@ export default function SwitchRoomModal({
   const codeReady = joinCode.length === 6
 
   return (
-    <BottomSheet open={open} onClose={onClose} title="Switch room">
+    <BottomSheet open={open} onClose={onClose} title="Spouse ID">
       <div className="space-y-6">
         {/* Current room */}
         <div className="space-y-2">
-          <p className="text-sm font-medium">Your current room code</p>
+          <p className="text-sm font-medium">Your current Spouse ID code</p>
           <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-muted">
             <span className="text-2xl font-mono font-semibold tracking-[0.3em]">
               {currentCode}
@@ -135,7 +135,7 @@ export default function SwitchRoomModal({
 
         {/* Join another room */}
         <div className="space-y-2">
-          <p className="text-sm font-medium">Join another room</p>
+          <p className="text-sm font-medium">Join your Spouse</p>
           <div className="border border-border rounded-xl p-4">
             <form onSubmit={handleJoin} className="space-y-3">
               <input
@@ -160,7 +160,7 @@ export default function SwitchRoomModal({
                 disabled={joining || !codeReady}
                 className="w-full h-11"
               >
-                {joining ? 'Joining…' : 'Join room'}
+                {joining ? 'Joining…' : 'Join Spouse'}
               </Button>
             </form>
           </div>
