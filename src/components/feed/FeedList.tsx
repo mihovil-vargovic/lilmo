@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useFeedEntries } from '@/hooks/useFeedEntries'
 import { groupByDay } from '@/lib/timeUtils'
 import DayGroup from '@/components/shared/DayGroup'
 import FeedEntryRow from './FeedEntryRow'
@@ -9,18 +8,24 @@ import FeedConfirmPopover from './FeedConfirmPopover'
 import { FeedEntry } from '@/types'
 
 interface FeedListProps {
-  roomCode: string
+  entries: FeedEntry[]
+  loading: boolean
+  addEntry: (loggedAt: Date, feedType: 'bottle' | 'boobies', durationMinutes?: number, amountMl?: number) => Promise<void>
+  updateEntry: (id: string, loggedAt: Date) => Promise<void>
+  deleteEntry: (id: string) => Promise<void>
   showPopover: boolean
   onClosePopover: () => void
 }
 
 export default function FeedList({
-  roomCode,
+  entries,
+  loading,
+  addEntry,
+  updateEntry,
+  deleteEntry,
   showPopover,
   onClosePopover,
 }: FeedListProps) {
-  const { entries, loading, addEntry, updateEntry, deleteEntry } =
-    useFeedEntries(roomCode)
   const [editEntry, setEditEntry] = useState<FeedEntry | null>(null)
   const [showEditPopover, setShowEditPopover] = useState(false)
 

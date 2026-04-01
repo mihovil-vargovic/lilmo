@@ -35,7 +35,7 @@ export default function FeedEntryRow({
           <FeedCountdown loggedAt={entry.logged_at} isLatest={isLatest} />
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground border border-border px-2 py-0.5 rounded-full">
+          <span className="text-xs text-muted-foreground border border-dashed border-border px-2 py-0.5 rounded-full">
             {feedLabel}
           </span>
           {entry.feed_type === 'bottle' && entry.amount_ml != null && (
