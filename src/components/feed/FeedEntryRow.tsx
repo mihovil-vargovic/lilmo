@@ -35,6 +35,9 @@ export default function FeedEntryRow({
           <FeedCountdown loggedAt={entry.logged_at} isLatest={isLatest} />
         </div>
         <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground border border-border px-2 py-0.5 rounded-full">
+            {feedLabel}
+          </span>
           {entry.feed_type === 'bottle' && entry.amount_ml != null && (
             <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
               {entry.amount_ml} ml
@@ -42,12 +45,9 @@ export default function FeedEntryRow({
           )}
           {entry.feed_type === 'boobies' && entry.duration_minutes != null && (
             <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-              {entry.duration_minutes} min
+              {entry.duration_minutes}m
             </span>
           )}
-          <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-            {feedLabel}
-          </span>
         </div>
       </div>
     </SwipeableRow>

@@ -29,7 +29,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
             onClick={() => setSwitchOpen(true)}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
-            Switch room
+            Spouse ID
           </button>
         </div>
         <TabBar code={code} />
