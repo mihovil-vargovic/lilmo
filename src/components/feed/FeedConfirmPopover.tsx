@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import BottomSheet from '@/components/shared/BottomSheet'
 import TimePicker from '@/components/shared/TimePicker'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { roundToNearest5 } from '@/lib/timeUtils'
 import { cn } from '@/lib/utils'
+import { CalendarDays } from 'lucide-react'
 
 interface FeedConfirmPopoverProps {
   open: boolean
@@ -17,7 +18,7 @@ interface FeedConfirmPopoverProps {
 }
 
 const DURATION_OPTIONS = [10, 15, 20, 25, 30]
-const AMOUNT_OPTIONS = [10, 20, 30, 40]
+const AMOUNT_OPTIONS = [5, 10, 20, 30, 40, 50, 60]
 
 export default function FeedConfirmPopover({
   open,
@@ -31,6 +32,7 @@ export default function FeedConfirmPopover({
   const [feedType, setFeedType] = useState<'bottle' | 'boobies'>('bottle')
   const [durationMinutes, setDurationMinutes] = useState(15)
   const [amountMl, setAmountMl] = useState(20)
+  const dateInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (open) {
@@ -40,6 +42,21 @@ export default function FeedConfirmPopover({
       setAmountMl(20)
     }
   }, [open, editEntry])
+
+  const toDateInputValue = (d: Date) => {
+    const y = d.getFullYear()
+    const m = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+    return `${y}-${m}-${day}`
+  }
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value) return
+    const [y, m, d] = e.target.value.split('-').map(Number)
+    const updated = new Date(time)
+    updated.setFullYear(y, m - 1, d)
+    setTime(updated)
+  }
 
   const endsAt = new Date(time.getTime() + durationMinutes * 60 * 1000)
   const endsAtStr = endsAt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
@@ -80,8 +97,24 @@ export default function FeedConfirmPopover({
         )}
 
         {/* Time picker — shared, always visible */}
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center gap-4">
           <TimePicker value={time} onChange={setTime} />
+          <button
+            type="button"
+            onClick={() => dateInputRef.current?.showPicker()}
+            className="w-11 h-11 flex items-center justify-center rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+            aria-label="Pick date"
+          >
+            <CalendarDays className="w-5 h-5" />
+          </button>
+          <input
+            ref={dateInputRef}
+            type="date"
+            value={toDateInputValue(time)}
+            onChange={handleDateChange}
+            className="sr-only"
+            tabIndex={-1}
+          />
         </div>
 
         {/* Options — overlapping grid so height never shifts */}
