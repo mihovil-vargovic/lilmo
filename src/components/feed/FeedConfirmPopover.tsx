@@ -18,7 +18,7 @@ interface FeedConfirmPopoverProps {
 }
 
 const DURATION_OPTIONS = [10, 15, 20, 25, 30]
-const AMOUNT_OPTIONS = [5, 10, 20, 30, 40, 50, 60]
+const AMOUNT_OPTIONS = [5, 10, 15, 20, 30, 40, 50, 60]
 
 export default function FeedConfirmPopover({
   open,

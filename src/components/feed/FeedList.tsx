@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { groupByDay } from '@/lib/timeUtils'
 import DayGroup from '@/components/shared/DayGroup'
 import FeedEntryRow from './FeedEntryRow'
+import NextFeedRow from './NextFeedRow'
 import FeedConfirmPopover from './FeedConfirmPopover'
 import { FeedEntry } from '@/types'
 
@@ -72,11 +73,13 @@ export default function FeedList({
         <div className="pb-28">
           {groups.map((group, groupIndex) => (
             <DayGroup key={group.date} label={group.label}>
+              {groupIndex === 0 && group.entries.length > 0 && (
+                <NextFeedRow loggedAt={group.entries[0].logged_at} />
+              )}
               {group.entries.map((entry, entryIndex) => (
                 <div key={entry.id}>
                   <FeedEntryRow
                     entry={entry}
-                    isLatest={groupIndex === 0 && entryIndex === 0}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                   />

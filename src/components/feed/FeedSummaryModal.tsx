@@ -10,7 +10,17 @@ interface FeedSummaryModalProps {
   entries: FeedEntry[]
 }
 
-function isSameDay(a: Date, b: Date) {
+// Day window: 12:00 noon on `date` to 11:59:59 the following day
+function getDayWindow(date: Date): { start: Date; end: Date } {
+  const start = new Date(date)
+  start.setHours(12, 0, 0, 0)
+  const end = new Date(date)
+  end.setDate(end.getDate() + 1)
+  end.setHours(11, 59, 59, 999)
+  return { start, end }
+}
+
+function isSameCalendarDay(a: Date, b: Date) {
   return (
     a.getFullYear() === b.getFullYear() &&
     a.getMonth() === b.getMonth() &&
@@ -21,8 +31,8 @@ function isSameDay(a: Date, b: Date) {
 function getDayLabel(date: Date, today: Date): string {
   const yesterday = new Date(today)
   yesterday.setDate(today.getDate() - 1)
-  if (isSameDay(date, today)) return 'Today'
-  if (isSameDay(date, yesterday)) return 'Yesterday'
+  if (isSameCalendarDay(date, today)) return 'Today'
+  if (isSameCalendarDay(date, yesterday)) return 'Yesterday'
   return date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
 }
 
@@ -36,7 +46,11 @@ interface DaySummary {
 }
 
 function buildSummary(entries: FeedEntry[], date: Date, today: Date): DaySummary {
-  const dayEntries = entries.filter((e) => isSameDay(new Date(e.logged_at), date))
+  const { start, end } = getDayWindow(date)
+  const dayEntries = entries.filter((e) => {
+    const t = new Date(e.logged_at)
+    return t >= start && t <= end
+  })
   const boobies = dayEntries.filter((e) => e.feed_type === 'boobies')
   const bottle = dayEntries.filter((e) => e.feed_type === 'bottle')
   return {
