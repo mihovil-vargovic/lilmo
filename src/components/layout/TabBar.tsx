@@ -25,29 +25,28 @@ export default function TabBar({ code }: TabBarProps) {
   const poopId = useRef(0)
 
   const handleDiaperTap = () => {
-    router.push(`/room/${code}/poop`)
     tapCount.current += 1
 
     if (tapTimer.current) clearTimeout(tapTimer.current)
-    tapTimer.current = setTimeout(() => { tapCount.current = 0 }, 1500)
+    tapTimer.current = setTimeout(() => { tapCount.current = 0 }, 2000)
 
     if (tapCount.current >= 5) {
       tapCount.current = 0
-      const newPoops: Poop[] = Array.from({ length: 12 }, (_, i) => ({
+      const newPoops: Poop[] = Array.from({ length: 18 }, () => ({
         id: poopId.current++,
-        x: 20 + Math.random() * 60,
-        delay: Math.random() * 400,
-        size: 18 + Math.random() * 16,
+        x: 10 + Math.random() * 80,
+        delay: Math.random() * 300,
+        size: 18 + Math.random() * 10,
       }))
       setPoops((p) => [...p, ...newPoops])
       setTimeout(() => {
         setPoops((p) => p.filter((pp) => !newPoops.find((n) => n.id === pp.id)))
-      }, 1800)
+      }, 3200)
     }
   }
 
   return (
-    <div className="bg-background px-4 py-2 relative">
+    <div className="bg-background px-4 py-2">
       <Tabs value={activeTab}>
         <TabsList className="w-full">
           <TabsTrigger
@@ -60,29 +59,36 @@ export default function TabBar({ code }: TabBarProps) {
           <TabsTrigger
             value="poop"
             className="flex-1"
-            onClick={handleDiaperTap}
+            onClick={() => {
+              router.push(`/room/${code}/poop`)
+              handleDiaperTap()
+            }}
           >
             Diaper
           </TabsTrigger>
         </TabsList>
       </Tabs>
 
-      {/* Poop confetti */}
+      {/* Poop confetti — fixed so nothing clips it */}
       {poops.map((p) => (
         <span
           key={p.id}
-          className="pointer-events-none absolute bottom-full"
+          className="pointer-events-none fixed z-[9999]"
           style={{
-            left: `${p.x}%`,
-            fontSize: p.size,
+            left: `${20 + Math.random() * 60}%`,
+            top: '100px',
+            fontSize: `${p.size}px`,
             animationDelay: `${p.delay}ms`,
-            animation: `poopFly 1.4s ease-out forwards`,
-          }}
+            animation: `poopFly 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`,
+            '--tx': `${-120 + Math.random() * 240}px`,
+            '--ty': `${200 + Math.random() * 280}px`,
+            '--pop': `${-(60 + Math.random() * 100)}px`,
+            '--tr': `${-240 + Math.random() * 480}deg`,
+          } as React.CSSProperties}
         >
           💩
         </span>
       ))}
-
     </div>
   )
 }
