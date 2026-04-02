@@ -21,21 +21,19 @@ export default function DeleteConfirmSheet({ open, onCancel, onConfirm }: Delete
         <SheetOverlay />
         <SheetContent
           side="bottom"
-          className="px-4 pt-4 pb-8 max-w-md mx-auto rounded-t-2xl [&>button]:hidden"
+          className="px-4 pt-6 pb-8 [&>button]:hidden"
         >
+          <div className="flex flex-col gap-1 mb-5">
+            <h2 className="text-base font-semibold">Delete entry</h2>
+            <p className="text-sm text-muted-foreground">This action cannot be undone.</p>
+          </div>
           <div className="flex flex-col gap-2">
-            <div className="rounded-xl overflow-hidden border border-border">
-              <div className="px-4 py-3 text-center border-b border-border">
-                <p className="text-sm font-semibold">Delete entry</p>
-                <p className="text-xs text-muted-foreground mt-0.5">This action cannot be undone</p>
-              </div>
-              <button
-                onClick={onConfirm}
-                className="w-full px-4 py-3.5 text-sm font-semibold text-red-500 bg-background hover:bg-muted transition-colors"
-              >
-                Delete
-              </button>
-            </div>
+            <button
+              onClick={onConfirm}
+              className="w-full h-11 rounded-xl bg-red-50 text-red-500 text-sm font-semibold transition-colors hover:bg-red-100"
+            >
+              Delete
+            </button>
             <Button variant="outline" className="w-full h-11" onClick={onCancel}>
               Cancel
             </Button>

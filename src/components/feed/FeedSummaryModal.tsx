@@ -10,16 +10,6 @@ interface FeedSummaryModalProps {
   entries: FeedEntry[]
 }
 
-// Returns the start of the current 24h period (last noon that has passed)
-function getCurrentPeriodStart(now: Date): Date {
-  const noon = new Date(now)
-  noon.setHours(12, 0, 0, 0)
-  if (now < noon) {
-    noon.setDate(noon.getDate() - 1)
-  }
-  return noon
-}
-
 interface DaySummary {
   label: string
   total: number
@@ -29,13 +19,15 @@ interface DaySummary {
   bottleMl: number
 }
 
-function buildSummary(entries: FeedEntry[], start: Date, label: string): DaySummary {
-  const end = new Date(start)
-  end.setDate(end.getDate() + 1)
+function buildSummary(entries: FeedEntry[], date: Date, label: string): DaySummary {
+  const start = new Date(date)
+  start.setHours(0, 0, 0, 0)
+  const end = new Date(date)
+  end.setHours(23, 59, 59, 999)
 
   const dayEntries = entries.filter((e) => {
     const t = new Date(e.logged_at)
-    return t >= start && t < end
+    return t >= start && t <= end
   })
   const boobies = dayEntries.filter((e) => e.feed_type === 'boobies')
   const bottle = dayEntries.filter((e) => e.feed_type === 'bottle')
@@ -97,13 +89,12 @@ function SummaryCard({ s, isToday }: { s: DaySummary; isToday?: boolean }) {
 }
 
 export default function FeedSummaryModal({ open, onClose, entries }: FeedSummaryModalProps) {
-  const now = new Date()
-  const todayStart = getCurrentPeriodStart(now)
-  const yesterdayStart = new Date(todayStart)
-  yesterdayStart.setDate(yesterdayStart.getDate() - 1)
+  const today = new Date()
+  const yesterday = new Date(today)
+  yesterday.setDate(today.getDate() - 1)
 
-  const todaySummary = buildSummary(entries, todayStart, 'Today')
-  const yesterdaySummary = buildSummary(entries, yesterdayStart, 'Yesterday')
+  const todaySummary = buildSummary(entries, today, 'Today')
+  const yesterdaySummary = buildSummary(entries, yesterday, 'Yesterday')
 
   return (
     <BottomSheet open={open} onClose={onClose} title="Summary">

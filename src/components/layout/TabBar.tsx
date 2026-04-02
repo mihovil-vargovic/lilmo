@@ -83,13 +83,6 @@ export default function TabBar({ code }: TabBarProps) {
         </span>
       ))}
 
-      <style>{`
-        @keyframes poopFly {
-          0%   { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 1; }
-          60%  { transform: translateY(-120px) scale(1.1) rotate(20deg); opacity: 1; }
-          100% { transform: translateY(-200px) scale(0.8) rotate(-10deg); opacity: 0; }
-        }
-      `}</style>
     </div>
   )
 }
