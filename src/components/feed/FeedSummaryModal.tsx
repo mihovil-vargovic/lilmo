@@ -10,30 +10,14 @@ interface FeedSummaryModalProps {
   entries: FeedEntry[]
 }
 
-// Day window: 12:00 noon on `date` to 11:59:59 the following day
-function getDayWindow(date: Date): { start: Date; end: Date } {
-  const start = new Date(date)
-  start.setHours(12, 0, 0, 0)
-  const end = new Date(date)
-  end.setDate(end.getDate() + 1)
-  end.setHours(11, 59, 59, 999)
-  return { start, end }
-}
-
-function isSameCalendarDay(a: Date, b: Date) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  )
-}
-
-function getDayLabel(date: Date, today: Date): string {
-  const yesterday = new Date(today)
-  yesterday.setDate(today.getDate() - 1)
-  if (isSameCalendarDay(date, today)) return 'Today'
-  if (isSameCalendarDay(date, yesterday)) return 'Yesterday'
-  return date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
+// Returns the start of the current 24h period (last noon that has passed)
+function getCurrentPeriodStart(now: Date): Date {
+  const noon = new Date(now)
+  noon.setHours(12, 0, 0, 0)
+  if (now < noon) {
+    noon.setDate(noon.getDate() - 1)
+  }
+  return noon
 }
 
 interface DaySummary {
@@ -45,16 +29,18 @@ interface DaySummary {
   bottleMl: number
 }
 
-function buildSummary(entries: FeedEntry[], date: Date, today: Date): DaySummary {
-  const { start, end } = getDayWindow(date)
+function buildSummary(entries: FeedEntry[], start: Date, label: string): DaySummary {
+  const end = new Date(start)
+  end.setDate(end.getDate() + 1)
+
   const dayEntries = entries.filter((e) => {
     const t = new Date(e.logged_at)
-    return t >= start && t <= end
+    return t >= start && t < end
   })
   const boobies = dayEntries.filter((e) => e.feed_type === 'boobies')
   const bottle = dayEntries.filter((e) => e.feed_type === 'bottle')
   return {
-    label: getDayLabel(date, today),
+    label,
     total: dayEntries.length,
     boobiesCount: boobies.length,
     bottleCount: bottle.length,
@@ -67,7 +53,6 @@ function SummaryCard({ s, isToday }: { s: DaySummary; isToday?: boolean }) {
   const boobiesPct = s.total > 0 ? Math.round((s.boobiesCount / s.total) * 100) : 0
   const bottlePct = s.total > 0 ? 100 - boobiesPct : 0
   const valueClass = isToday ? 'text-2xl font-semibold' : 'text-sm font-medium pl-3.5'
-  const labelClass = isToday ? 'text-xs text-muted-foreground' : 'text-xs text-muted-foreground'
 
   return (
     <div className="rounded-xl border border-border p-4 flex flex-col gap-3">
@@ -80,7 +65,6 @@ function SummaryCard({ s, isToday }: { s: DaySummary; isToday?: boolean }) {
         <p className="text-xs text-muted-foreground">No entries</p>
       ) : (
         <>
-          {/* Progress bar */}
           <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden flex">
             <div className="h-full bg-pink-400 rounded-l-full" style={{ width: `${boobiesPct}%` }} />
             <div className="h-full bg-blue-400 rounded-r-full" style={{ width: `${bottlePct}%` }} />
@@ -91,7 +75,7 @@ function SummaryCard({ s, isToday }: { s: DaySummary; isToday?: boolean }) {
               <div className="flex flex-col gap-0.5">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-pink-400 shrink-0" />
-                  <span className="text-xs text-muted-foreground">Boobies {boobiesPct}%</span>
+                  <span className="text-xs text-muted-foreground">Boobies</span>
                 </div>
                 <span className={valueClass}>{s.boobiesMinutes} min total</span>
               </div>
@@ -100,12 +84,11 @@ function SummaryCard({ s, isToday }: { s: DaySummary; isToday?: boolean }) {
               <div className="flex flex-col gap-0.5">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />
-                  <span className="text-xs text-muted-foreground">Bottle {bottlePct}%</span>
+                  <span className="text-xs text-muted-foreground">Bottle</span>
                 </div>
                 <span className={valueClass}>{s.bottleMl} ml total</span>
               </div>
             )}
-
           </div>
         </>
       )}
@@ -114,12 +97,13 @@ function SummaryCard({ s, isToday }: { s: DaySummary; isToday?: boolean }) {
 }
 
 export default function FeedSummaryModal({ open, onClose, entries }: FeedSummaryModalProps) {
-  const today = new Date()
-  const yesterday = new Date(today)
-  yesterday.setDate(today.getDate() - 1)
+  const now = new Date()
+  const todayStart = getCurrentPeriodStart(now)
+  const yesterdayStart = new Date(todayStart)
+  yesterdayStart.setDate(yesterdayStart.getDate() - 1)
 
-  const todaySummary = buildSummary(entries, today, today)
-  const yesterdaySummary = buildSummary(entries, yesterday, today)
+  const todaySummary = buildSummary(entries, todayStart, 'Today')
+  const yesterdaySummary = buildSummary(entries, yesterdayStart, 'Yesterday')
 
   return (
     <BottomSheet open={open} onClose={onClose} title="Summary">

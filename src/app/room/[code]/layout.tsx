@@ -22,7 +22,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Sticky header + tabs */}
+      {/* Sticky header only */}
       <div className="sticky top-0 z-20 bg-background">
         <div className="h-12 flex items-center justify-between px-4 border-b border-border">
           <span className="text-xl font-semibold tracking-tight">Lilmo</span>
@@ -33,8 +33,9 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
             Spouse ID
           </button>
         </div>
-        <TabBar code={code} />
       </div>
+      {/* Tab bar scrolls with content */}
+      <TabBar code={code} />
 
       {/* Content */}
       <div className="flex-1 relative">
@@ -46,7 +47,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
         onClose={() => setSwitchOpen(false)}
         currentCode={code}
       />
-      <Toaster position="top-center" richColors />
+      <Toaster position="top-center" toastOptions={{ style: { background: '#000', color: '#fff' } }} />
     </div>
   )
 }

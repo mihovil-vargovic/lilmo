@@ -7,6 +7,7 @@ import { groupByDay } from '@/lib/timeUtils'
 import DayGroup from '@/components/shared/DayGroup'
 import PoopEntryRow from './PoopEntryRow'
 import PoopConfirmPopover from './PoopConfirmPopover'
+import DeleteConfirmSheet from '@/components/shared/DeleteConfirmSheet'
 import { PoopEntry } from '@/types'
 
 interface PoopListProps {
@@ -24,20 +25,25 @@ export default function PoopList({
     usePoopEntries(roomCode)
   const [editEntry, setEditEntry] = useState<PoopEntry | null>(null)
   const [showEditPopover, setShowEditPopover] = useState(false)
+  const [deleteId, setDeleteId] = useState<string | null>(null)
 
   const handleEdit = (entry: PoopEntry) => {
     setEditEntry(entry)
     setShowEditPopover(true)
   }
 
-  const handleDelete = async (id: string) => {
-    await deleteEntry(id)
-    toast.success('Entry deleted')
+  const handleDelete = (id: string) => setDeleteId(id)
+
+  const confirmDelete = async () => {
+    if (!deleteId) return
+    await deleteEntry(deleteId)
+    setDeleteId(null)
+    toast('Entry deleted', { style: { background: '#000', color: '#fff' } })
   }
 
   const handleUpdate = async (id: string, loggedAt: Date) => {
     await updateEntry(id, loggedAt)
-    toast.success('Entry updated')
+    toast('Entry updated', { style: { background: '#000', color: '#fff' } })
   }
 
   const groups = groupByDay(entries)
@@ -83,6 +89,12 @@ export default function PoopList({
           ))}
         </div>
       )}
+
+      <DeleteConfirmSheet
+        open={!!deleteId}
+        onCancel={() => setDeleteId(null)}
+        onConfirm={confirmDelete}
+      />
 
       {/* Add popover */}
       <PoopConfirmPopover

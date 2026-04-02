@@ -41,7 +41,7 @@ export default function FeedPage({ params }: FeedPageProps) {
       >
         <button
           onClick={() => setShowPopover(true)}
-          className="h-12 w-36 rounded-full bg-primary text-primary-foreground text-sm font-medium shadow-md"
+          className="h-12 w-36 rounded-full bg-primary text-primary-foreground text-sm font-medium shadow-[0_4px_20px_rgba(0,0,0,0.25)]"
         >
           Add food
         </button>
@@ -57,7 +57,7 @@ export default function FeedPage({ params }: FeedPageProps) {
       >
         <button
           onClick={() => setShowSummary(true)}
-          className="w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-md flex items-center justify-center"
+          className="w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex items-center justify-center"
           aria-label="Summary"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -7,13 +7,14 @@ import DayGroup from '@/components/shared/DayGroup'
 import FeedEntryRow from './FeedEntryRow'
 import NextFeedRow from './NextFeedRow'
 import FeedConfirmPopover from './FeedConfirmPopover'
+import DeleteConfirmSheet from '@/components/shared/DeleteConfirmSheet'
 import { FeedEntry } from '@/types'
 
 interface FeedListProps {
   entries: FeedEntry[]
   loading: boolean
   addEntry: (loggedAt: Date, feedType: 'bottle' | 'boobies', durationMinutes?: number, amountMl?: number) => Promise<void>
-  updateEntry: (id: string, loggedAt: Date) => Promise<void>
+  updateEntry: (id: string, loggedAt: Date, feedType: 'bottle' | 'boobies', durationMinutes?: number, amountMl?: number) => Promise<void>
   deleteEntry: (id: string) => Promise<void>
   showPopover: boolean
   onClosePopover: () => void
@@ -30,20 +31,25 @@ export default function FeedList({
 }: FeedListProps) {
   const [editEntry, setEditEntry] = useState<FeedEntry | null>(null)
   const [showEditPopover, setShowEditPopover] = useState(false)
+  const [deleteId, setDeleteId] = useState<string | null>(null)
 
   const handleEdit = (entry: FeedEntry) => {
     setEditEntry(entry)
     setShowEditPopover(true)
   }
 
-  const handleDelete = async (id: string) => {
-    await deleteEntry(id)
-    toast.success('Entry deleted')
+  const handleDelete = (id: string) => setDeleteId(id)
+
+  const confirmDelete = async () => {
+    if (!deleteId) return
+    await deleteEntry(deleteId)
+    setDeleteId(null)
+    toast('Entry deleted', { style: { background: '#000', color: '#fff' } })
   }
 
-  const handleUpdate = async (id: string, loggedAt: Date) => {
-    await updateEntry(id, loggedAt)
-    toast.success('Entry updated')
+  const handleUpdate = async (id: string, loggedAt: Date, feedType: 'bottle' | 'boobies', durationMinutes?: number, amountMl?: number) => {
+    await updateEntry(id, loggedAt, feedType, durationMinutes, amountMl)
+    toast('Entry updated', { style: { background: '#000', color: '#fff' } })
   }
 
   const groups = groupByDay(entries)
@@ -52,10 +58,7 @@ export default function FeedList({
     return (
       <div className="px-4 py-4 space-y-3">
         {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="animate-pulse bg-muted rounded h-4 w-full"
-          />
+          <div key={i} className="animate-pulse bg-muted rounded h-4 w-full" />
         ))}
       </div>
     )
@@ -93,23 +96,24 @@ export default function FeedList({
         </div>
       )}
 
-      {/* Add popover */}
       <FeedConfirmPopover
         open={showPopover}
         onClose={onClosePopover}
         onConfirm={addEntry}
       />
 
-      {/* Edit popover */}
       <FeedConfirmPopover
         open={showEditPopover}
-        onClose={() => {
-          setShowEditPopover(false)
-          setEditEntry(null)
-        }}
+        onClose={() => { setShowEditPopover(false); setEditEntry(null) }}
         onConfirm={addEntry}
         editEntry={editEntry}
         onUpdate={handleUpdate}
+      />
+
+      <DeleteConfirmSheet
+        open={!!deleteId}
+        onCancel={() => setDeleteId(null)}
+        onConfirm={confirmDelete}
       />
     </>
   )

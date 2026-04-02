@@ -129,10 +129,21 @@ export function useFeedEntries(roomCode: string) {
     }
   }
 
-  const updateEntry = async (id: string, loggedAt: Date) => {
+  const updateEntry = async (
+    id: string,
+    loggedAt: Date,
+    feedType?: 'bottle' | 'boobies',
+    durationMinutes?: number,
+    amountMl?: number
+  ) => {
     const { error } = await supabase
       .from('feed_entries')
-      .update({ logged_at: loggedAt.toISOString() })
+      .update({
+        logged_at: loggedAt.toISOString(),
+        ...(feedType !== undefined && { feed_type: feedType }),
+        ...(durationMinutes !== undefined && { duration_minutes: durationMinutes }),
+        ...(amountMl !== undefined && { amount_ml: amountMl }),
+      })
       .eq('id', id)
     if (error) throw error
   }

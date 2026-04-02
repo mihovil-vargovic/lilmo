@@ -43,8 +43,7 @@ export default function NextFeedRow({ loggedAt }: NextFeedRowProps) {
   const progress = isOverdue ? 0 : Math.min(1, remaining / FEED_INTERVAL_MS)
   const isWarning = !isOverdue && remaining <= WARN_THRESHOLD_MS
 
-  const timeColor = isOverdue ? 'text-red-400' : isWarning ? 'text-orange-400' : 'text-blue-400'
-  const labelColor = isOverdue ? 'text-red-500' : isWarning ? 'text-orange-500' : 'text-blue-500'
+  const color = isOverdue ? 'text-red-500' : isWarning ? 'text-orange-500' : 'text-blue-500'
   const ringColor = isWarning ? 'orange' : 'blue'
 
   const label = isOverdue
@@ -54,12 +53,12 @@ export default function NextFeedRow({ loggedAt }: NextFeedRowProps) {
   return (
     <>
       <div className="flex items-center justify-between px-4 py-3 bg-background">
-        <div className="flex items-center gap-2.5">
-          <span className={`text-sm font-semibold tabular-nums ${timeColor}`}>
+        <div className={`flex items-center gap-2.5 ${color}`}>
+          <span className="text-sm font-semibold tabular-nums">
             {estimatedTime}
           </span>
-          <div className={`flex items-center gap-1.5 ${labelColor}`}>
-            <span className="text-xs font-medium">{label}</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-sm font-normal">{label}</span>
             {!isOverdue && <CountdownRing progress={progress} color={ringColor} />}
           </div>
         </div>
