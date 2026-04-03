@@ -79,7 +79,7 @@ function HalftoneBar({ boobiesPct, bottlePct, uid }: { boobiesPct: number; bottl
 function SummaryCard({ s, isToday }: { s: DaySummary; isToday?: boolean }) {
   const boobiesPct = s.total > 0 ? Math.round((s.boobiesCount / s.total) * 100) : 0
   const bottlePct = s.total > 0 ? 100 - boobiesPct : 0
-  const valueClass = isToday ? 'text-2xl font-semibold' : 'text-sm font-medium pl-3.5'
+  const valueClass = isToday ? 'text-2xl font-semibold' : 'text-sm font-medium'
   const uid = s.label.toLowerCase().replace(/\s+/g, '-')
 
   return (
