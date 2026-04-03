@@ -18,10 +18,10 @@ export default function StickyAddButton({
   return (
     <div
       className={cn(
-        'fixed bottom-6 left-1/2 -translate-x-1/2 z-40 transition-all duration-300',
+        'fixed left-1/2 -translate-x-1/2 z-40 transition-all duration-300',
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
       )}
-      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      style={{ bottom: 'calc(1.5rem + env(safe-area-inset-bottom))' }}
     >
       <Button
         onClick={onClick}

@@ -29,7 +29,7 @@ export default function FeedConfirmPopover({
 }: FeedConfirmPopoverProps) {
   const [time, setTime] = useState<Date>(roundToNearest5(new Date()))
   const [saving, setSaving] = useState(false)
-  const [feedType, setFeedType] = useState<'bottle' | 'boobies'>('bottle')
+  const [feedType, setFeedType] = useState<'bottle' | 'boobies'>('boobies')
   const [durationMinutes, setDurationMinutes] = useState(15)
   const [amountMl, setAmountMl] = useState(20)
   const dateInputRef = useRef<HTMLInputElement>(null)
@@ -37,7 +37,7 @@ export default function FeedConfirmPopover({
   useEffect(() => {
     if (open) {
       setTime(editEntry ? new Date(editEntry.logged_at) : roundToNearest5(new Date()))
-      setFeedType(editEntry?.feed_type ?? 'bottle')
+      setFeedType(editEntry?.feed_type ?? 'boobies')
       setDurationMinutes(editEntry?.duration_minutes ?? 15)
       setAmountMl(editEntry?.amount_ml ?? 20)
     }
@@ -95,8 +95,8 @@ export default function FeedConfirmPopover({
         {/* Segment control */}
         <Tabs value={feedType} onValueChange={(v) => setFeedType(v as 'bottle' | 'boobies')}>
           <TabsList className="w-full">
-            <TabsTrigger value="bottle" className="flex-1">Bottle</TabsTrigger>
             <TabsTrigger value="boobies" className="flex-1">Boobies</TabsTrigger>
+            <TabsTrigger value="bottle" className="flex-1">Bottle</TabsTrigger>
           </TabsList>
         </Tabs>
 
