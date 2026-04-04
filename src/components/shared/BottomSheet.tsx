@@ -24,7 +24,7 @@ export default function BottomSheet({
     <Sheet open={open} onOpenChange={(o) => { if (!o) onClose() }}>
       <SheetContent
         side="bottom"
-        className="px-0 pb-0 pt-[10px] max-h-[90vh] overflow-y-auto [touch-action:pan-y]"
+        className="px-0 pb-0 pt-[10px] max-h-[90vh] overflow-y-auto [touch-action:pan-y] md:inset-0 md:m-auto md:w-[520px] md:h-fit md:max-h-[85vh] md:rounded-2xl md:data-[state=open]:slide-in-from-bottom-[50px] md:data-[state=closed]:slide-out-to-bottom-[50px]"
       >
         <SheetHeader className="px-4 pb-2 border-b border-border text-left flex-row items-center justify-between pr-14 pt-0">
           <SheetTitle className="text-lg font-semibold leading-[44px]">{title}</SheetTitle>

@@ -24,7 +24,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Sticky header only */}
       <div className="sticky top-0 z-20 bg-background">
-        <div className="h-12 flex items-center justify-between px-4 border-b border-border">
+        <div className="h-12 flex items-center justify-between px-4 md:px-8 border-b border-border">
           <span className="text-xl font-semibold tracking-tight">Lilmo</span>
           <button
             onClick={() => setSwitchOpen(true)}

@@ -52,7 +52,7 @@ export default function NextFeedRow({ loggedAt }: NextFeedRowProps) {
 
   return (
     <>
-      <div className="flex items-center justify-between px-4 py-3 bg-background">
+      <div className="flex items-center justify-between px-4 md:px-8 py-3 bg-background">
         <div className={`flex items-center gap-2.5 ${color}`}>
           <span className="text-sm font-semibold tabular-nums">
             {estimatedTime}
@@ -63,7 +63,7 @@ export default function NextFeedRow({ loggedAt }: NextFeedRowProps) {
           </div>
         </div>
       </div>
-      <div className="h-px bg-border mx-4 border-dashed" style={{ borderTop: '1px dashed', borderColor: 'hsl(var(--border))' }} />
+      <div className="h-px bg-border mx-4 md:mx-8 border-dashed" style={{ borderTop: '1px dashed', borderColor: 'hsl(var(--border))' }} />
     </>
   )
 }

@@ -46,7 +46,7 @@ export default function TabBar({ code }: TabBarProps) {
   }
 
   return (
-    <div className="bg-background px-4 py-2">
+    <div className="bg-background px-4 md:px-8 py-2">
       <Tabs value={activeTab}>
         <TabsList className="w-full">
           <TabsTrigger

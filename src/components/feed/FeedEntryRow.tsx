@@ -16,7 +16,7 @@ export default function FeedEntryRow({ entry, onEdit, onDelete }: FeedEntryRowPr
 
   return (
     <SwipeableRow onEdit={() => onEdit(entry)} onDelete={() => onDelete(entry.id)}>
-      <div className="flex items-center justify-between px-4 py-3.5 bg-background">
+      <div className="flex items-center justify-between px-4 md:px-8 py-3.5 bg-background">
         <div className="flex items-center gap-2.5">
           <span className="text-sm font-semibold tabular-nums">{time}</span>
         </div>

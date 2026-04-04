@@ -50,7 +50,7 @@ export default function PoopList({
 
   if (loading) {
     return (
-      <div className="px-4 py-4 space-y-3">
+      <div className="px-4 md:px-8 py-4 space-y-3">
         {[1, 2, 3].map((i) => (
           <div
             key={i}
@@ -81,7 +81,7 @@ export default function PoopList({
                     onDelete={handleDelete}
                   />
                   {entryIndex < group.entries.length - 1 && (
-                    <div className="h-px bg-border mx-4" />
+                    <div className="h-px bg-border mx-4 md:mx-8" />
                   )}
                 </div>
               ))}
