@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { supabase } from '@/lib/supabase'
 import { PoopEntry, PoopType } from '@/types'
@@ -8,11 +8,6 @@ import { PoopEntry, PoopType } from '@/types'
 export function usePoopEntries(roomCode: string) {
   const [entries, setEntries] = useState<PoopEntry[]>([])
   const [loading, setLoading] = useState(true)
-  const entriesRef = useRef<PoopEntry[]>([])
-
-  useEffect(() => {
-    entriesRef.current = entries
-  }, [entries])
 
   useEffect(() => {
     if (!roomCode) return
@@ -25,7 +20,14 @@ export function usePoopEntries(roomCode: string) {
       .order('logged_at', { ascending: false })
       .then(({ data }) => {
         if (data) {
-          setEntries(data)
+          setEntries((prev) => {
+            const merged = [...data]
+            prev.forEach((e) => {
+              if (!merged.some((m) => m.id === e.id)) merged.push(e)
+            })
+            merged.sort((a, b) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime())
+            return merged
+          })
         }
         setLoading(false)
       })
@@ -81,15 +83,6 @@ export function usePoopEntries(roomCode: string) {
 
   const addEntry = async (loggedAt: Date, type: PoopType) => {
     const now = new Date()
-    const oneMinuteAgo = new Date(now.getTime() - 60000)
-
-    const current = entriesRef.current
-    const duplicate = current.find((e) => {
-      const createdAt = new Date(e.created_at)
-      return createdAt >= oneMinuteAgo && createdAt <= now
-    })
-    if (duplicate) return
-
     const id = uuidv4()
     const newEntry: PoopEntry = {
       id,
