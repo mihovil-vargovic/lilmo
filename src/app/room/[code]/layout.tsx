@@ -42,7 +42,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
       {/* Offline banner */}
       {!isOnline && (
         <div className="sticky top-0 z-30 bg-orange-100 text-orange-700 text-xs text-center py-1.5 px-4">
-          Turn on Internet connection
+          You appear to be offline
         </div>
       )}
       {/* Sticky header only */}

@@ -17,7 +17,7 @@ export default function FeedPage({ params }: FeedPageProps) {
   const [showPopover, setShowPopover] = useState(false)
   const [showSummary, setShowSummary] = useState(false)
   const { entries, loading, addEntry, updateEntry, deleteEntry } = useFeedEntries(code)
-  const visible = useScrollHide()
+  const { primary, secondary } = useScrollHide()
 
   return (
     <>
@@ -35,7 +35,7 @@ export default function FeedPage({ params }: FeedPageProps) {
       <div
         className={cn(
           'fixed left-1/2 -translate-x-1/2 z-40 transition-all duration-300',
-          visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+          primary ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         )}
         style={{ bottom: 'calc(1.5rem + env(safe-area-inset-bottom))' }}
       >
@@ -51,7 +51,7 @@ export default function FeedPage({ params }: FeedPageProps) {
       <div
         className={cn(
           'fixed right-6 z-40 transition-all duration-300',
-          visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+          secondary ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         )}
         style={{ bottom: 'calc(1.5rem + env(safe-area-inset-bottom))' }}
       >
