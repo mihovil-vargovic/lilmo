@@ -45,7 +45,7 @@ export default function TimePicker({ value, onChange }: TimePickerProps) {
         >
           <ChevronUp className="w-7 h-7" />
         </button>
-        <span className="text-5xl font-semibold tabular-nums w-[3.5rem] text-center leading-none">
+        <span className="text-5xl font-semibold font-mono w-[3.5rem] text-center leading-none">
           {pad(hours)}
         </span>
         <button
@@ -58,9 +58,14 @@ export default function TimePicker({ value, onChange }: TimePickerProps) {
         </button>
       </div>
 
-      <span className="text-4xl font-light text-muted-foreground select-none mb-0.5">
-        :
-      </span>
+      {/* Colon — aligned to the number row, not the full column */}
+      <div className="flex flex-col items-center gap-2">
+        <div className="p-1 w-7 h-7" />
+        <span className="text-5xl font-light text-muted-foreground select-none leading-none flex items-center justify-center w-5">
+          :
+        </span>
+        <div className="p-1 w-7 h-7" />
+      </div>
 
       {/* Minutes */}
       <div className="flex flex-col items-center gap-2">
@@ -72,7 +77,7 @@ export default function TimePicker({ value, onChange }: TimePickerProps) {
         >
           <ChevronUp className="w-7 h-7" />
         </button>
-        <span className="text-5xl font-semibold tabular-nums w-[3.5rem] text-center leading-none">
+        <span className="text-5xl font-semibold font-mono w-[3.5rem] text-center leading-none">
           {pad(MINUTES[minuteIndex])}
         </span>
         <button

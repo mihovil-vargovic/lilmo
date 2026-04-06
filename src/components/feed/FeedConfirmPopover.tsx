@@ -8,6 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { roundToNearest5 } from '@/lib/timeUtils'
 import { cn } from '@/lib/utils'
 import { CalendarDays } from 'lucide-react'
+import { toast } from 'sonner'
 
 interface FeedConfirmPopoverProps {
   open: boolean
@@ -83,6 +84,7 @@ export default function FeedConfirmPopover({
       onClose()
     } catch (e) {
       console.error(e)
+      toast.error('Could not save entry. Please try again.')
     } finally {
       setSaving(false)
     }
@@ -126,7 +128,7 @@ export default function FeedConfirmPopover({
             'col-start-1 row-start-1 flex flex-col items-center gap-3 w-full min-w-0',
             feedType !== 'bottle' && 'invisible pointer-events-none'
           )}>
-            <p className="text-sm text-muted-foreground">Amount</p>
+            <p className="text-sm text-muted-foreground">Choose amount</p>
             <div className="flex gap-2 overflow-x-auto w-full pb-1 scrollbar-none [touch-action:pan-x]">
               {AMOUNT_OPTIONS.map((ml) => (
                 <button
@@ -152,7 +154,7 @@ export default function FeedConfirmPopover({
             feedType !== 'boobies' && 'invisible pointer-events-none'
           )}>
             <div className="flex items-center justify-center gap-1.5 w-full">
-              <p className="text-sm text-muted-foreground">Duration</p>
+              <p className="text-sm text-muted-foreground">Choose duration</p>
               <span className="text-sm text-muted-foreground">·</span>
               <p className="text-sm text-muted-foreground">
                 Ended at <span className="font-medium text-foreground">{endsAtStr}</span>

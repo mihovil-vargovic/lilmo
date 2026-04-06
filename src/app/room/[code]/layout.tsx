@@ -5,6 +5,22 @@ import TabBar from '@/components/layout/TabBar'
 import SwitchRoomModal from '@/components/shared/SwitchRoomModal'
 import { Toaster } from 'sonner'
 
+function useOnlineStatus() {
+  const [isOnline, setIsOnline] = useState(true)
+  useEffect(() => {
+    setIsOnline(navigator.onLine)
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
+  }, [])
+  return isOnline
+}
+
 interface RoomLayoutProps {
   children: React.ReactNode
   params: { code: string }
@@ -13,6 +29,7 @@ interface RoomLayoutProps {
 export default function RoomLayout({ children, params }: RoomLayoutProps) {
   const { code } = params
   const [switchOpen, setSwitchOpen] = useState(false)
+  const isOnline = useOnlineStatus()
 
   // Auto-save room code when visiting the URL directly (e.g. shared link)
   useEffect(() => {
@@ -22,10 +39,16 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Offline banner */}
+      {!isOnline && (
+        <div className="sticky top-0 z-30 bg-orange-100 text-orange-700 text-xs text-center py-1.5 px-4">
+          Turn on Internet connection
+        </div>
+      )}
       {/* Sticky header only */}
       <div className="sticky top-0 z-20 bg-background">
         <div className="h-12 flex items-center justify-between px-4 md:px-8 border-b border-border">
-          <span className="text-xl font-semibold tracking-tight">Lilmo</span>
+          <span className="text-xl font-semibold tracking-wide">Lilmo</span>
           <button
             onClick={() => setSwitchOpen(true)}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"

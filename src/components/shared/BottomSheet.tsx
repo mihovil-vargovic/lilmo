@@ -29,7 +29,7 @@ export default function BottomSheet({
         <SheetHeader className="px-4 pb-2 border-b border-border text-left flex-row items-center justify-between pr-14 pt-0">
           <SheetTitle className="text-lg font-semibold leading-[44px]">{title}</SheetTitle>
         </SheetHeader>
-        <div className="px-4 pt-3 pb-safe">{children}</div>
+        <div className="px-4 pt-3 pb-4">{children}</div>
       </SheetContent>
     </Sheet>
   )

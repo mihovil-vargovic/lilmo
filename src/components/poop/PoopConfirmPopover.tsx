@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { roundToNearest5 } from '@/lib/timeUtils'
 import { PoopType, PoopEntry } from '@/types'
+import { toast } from 'sonner'
 
 interface PoopConfirmPopoverProps {
   open: boolean
@@ -60,6 +61,7 @@ export default function PoopConfirmPopover({
       onClose()
     } catch (e) {
       console.error(e)
+      toast.error('Could not save entry. Please try again.')
     } finally {
       setSaving(false)
     }

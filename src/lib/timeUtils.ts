@@ -1,6 +1,6 @@
 export function roundToNearest5(date: Date): Date {
   const ms = 5 * 60 * 1000
-  return new Date(Math.round(date.getTime() / ms) * ms)
+  return new Date(Math.floor(date.getTime() / ms) * ms)
 }
 
 export function groupByDay<T extends { logged_at: string }>(

@@ -30,7 +30,7 @@ export default function DeleteConfirmSheet({ open, onCancel, onConfirm }: Delete
           <div className="flex flex-col gap-2">
             <button
               onClick={onConfirm}
-              className="w-full h-11 rounded-xl bg-red-50 text-red-500 text-sm font-semibold transition-colors hover:bg-red-100"
+              className="w-full h-11 rounded-xl bg-red-500 text-white text-sm font-semibold transition-colors hover:bg-red-600"
             >
               Delete
             </button>

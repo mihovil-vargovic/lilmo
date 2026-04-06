@@ -12,25 +12,34 @@ export function usePoopEntries(roomCode: string) {
   useEffect(() => {
     if (!roomCode) return
 
-    // Initial fetch
-    supabase
-      .from('poop_entries')
-      .select('*')
-      .eq('room_code', roomCode)
-      .order('logged_at', { ascending: false })
-      .then(({ data }) => {
-        if (data) {
-          setEntries((prev) => {
-            const merged = [...data]
-            prev.forEach((e) => {
-              if (!merged.some((m) => m.id === e.id)) merged.push(e)
+    const fetchEntries = () =>
+      supabase
+        .from('poop_entries')
+        .select('*')
+        .eq('room_code', roomCode)
+        .order('logged_at', { ascending: false })
+        .then(({ data }) => {
+          if (data) {
+            setEntries((prev) => {
+              const merged = [...data]
+              prev.forEach((e) => {
+                if (!merged.some((m) => m.id === e.id)) merged.push(e)
+              })
+              merged.sort((a, b) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime())
+              return merged
             })
-            merged.sort((a, b) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime())
-            return merged
-          })
-        }
-        setLoading(false)
-      })
+          }
+          setLoading(false)
+        })
+
+    // Initial fetch
+    fetchEntries()
+
+    // Refetch when user returns to the app (covers background suspension & reconnect)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') fetchEntries()
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
 
     // Real-time subscription
     const channel = supabase
@@ -77,6 +86,7 @@ export function usePoopEntries(roomCode: string) {
       .subscribe()
 
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
       supabase.removeChannel(channel)
     }
   }, [roomCode])
