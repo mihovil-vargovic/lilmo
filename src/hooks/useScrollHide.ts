@@ -30,11 +30,11 @@ export function useScrollHide(): ScrollVisibility {
           } else if (diff > 0) {
             // Scrolling down — primary hides first, secondary follows
             setPrimary(false)
-            staggerTimer.current = setTimeout(() => setSecondary(false), 120)
+            staggerTimer.current = setTimeout(() => setSecondary(false), 40)
           } else {
             // Scrolling up — secondary shows first, primary follows
             setSecondary(true)
-            staggerTimer.current = setTimeout(() => setPrimary(true), 120)
+            staggerTimer.current = setTimeout(() => setPrimary(true), 40)
           }
 
           lastScrollY.current = currentScrollY

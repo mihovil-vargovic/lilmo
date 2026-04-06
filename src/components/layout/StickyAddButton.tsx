@@ -13,7 +13,7 @@ export default function StickyAddButton({
   onClick,
   label = 'Add Entry',
 }: StickyAddButtonProps) {
-  const visible = useScrollHide()
+  const { primary: visible } = useScrollHide()
 
   return (
     <div
