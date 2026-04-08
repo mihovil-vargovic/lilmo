@@ -54,6 +54,49 @@
   }
 }
 
+/* ---- Sonner Toast ---- */
+@keyframes sonner-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sonner-fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.96);
+  }
+}
+
+@keyframes toast-timer {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
+[data-sonner-toast] {
+  overflow: hidden;
+}
+
+[data-sonner-toast]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: inherit;
+  animation: toast-timer 4000ms linear forwards;
+  pointer-events: none;
+}
+
+/* ---- Poop confetti ---- */
 @keyframes poopFly {
   0%   { transform: translate(0, 0) scale(0.4) rotate(0deg); opacity: 1; }
   30%  { transform: translate(calc(var(--tx) * 0.35), var(--pop)) scale(1.15) rotate(calc(var(--tr) * 0.4)); opacity: 1; }
