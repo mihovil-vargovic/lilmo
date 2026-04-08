@@ -12,6 +12,7 @@ interface BottomSheetProps {
   onClose: () => void
   title: string
   children: React.ReactNode
+  headerAction?: React.ReactNode
 }
 
 export default function BottomSheet({
@@ -19,6 +20,7 @@ export default function BottomSheet({
   onClose,
   title,
   children,
+  headerAction,
 }: BottomSheetProps) {
   return (
     <Sheet open={open} onOpenChange={(o) => { if (!o) onClose() }}>
@@ -28,6 +30,7 @@ export default function BottomSheet({
       >
         <SheetHeader className="px-4 pb-2 border-b border-border text-left flex-row items-center justify-between pt-0">
           <SheetTitle className="text-lg font-semibold leading-[44px]">{title}</SheetTitle>
+          {headerAction && <div className="flex items-center">{headerAction}</div>}
         </SheetHeader>
         <div className="px-4 pt-3 pb-4">{children}</div>
       </SheetContent>

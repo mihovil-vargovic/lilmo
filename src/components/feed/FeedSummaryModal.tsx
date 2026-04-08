@@ -1,6 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import BottomSheet from '@/components/shared/BottomSheet'
+import FullScreenSheet from '@/components/shared/FullScreenSheet'
 import { Button } from '@/components/ui/button'
 import { FeedEntry } from '@/types'
 
@@ -39,6 +41,31 @@ function buildSummary(entries: FeedEntry[], date: Date, label: string): DaySumma
     boobiesMinutes: boobies.reduce((s, e) => s + (e.duration_minutes ?? 0), 0),
     bottleMl: bottle.reduce((s, e) => s + (e.amount_ml ?? 0), 0),
   }
+}
+
+function getHistoryDays(entries: FeedEntry[]): Date[] {
+  const seen = new Set<string>()
+  const days: Date[] = []
+  for (const e of entries) {
+    const d = new Date(e.logged_at)
+    const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
+    if (!seen.has(key)) {
+      seen.add(key)
+      days.push(new Date(d.getFullYear(), d.getMonth(), d.getDate()))
+    }
+  }
+  return days // already newest-first since entries are sorted desc
+}
+
+function formatDayLabel(date: Date): string {
+  const today = new Date()
+  const isCurrentYear = date.getFullYear() === today.getFullYear()
+  return date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+    ...(!isCurrentYear ? { year: 'numeric' } : {}),
+  })
 }
 
 function HalftoneBar({ boobiesPct, bottlePct, uid }: { boobiesPct: number; bottlePct: number; uid: string }) {
@@ -122,6 +149,8 @@ function SummaryCard({ s, isToday }: { s: DaySummary; isToday?: boolean }) {
 }
 
 export default function FeedSummaryModal({ open, onClose, entries }: FeedSummaryModalProps) {
+  const [allHistoryOpen, setAllHistoryOpen] = useState(false)
+
   const today = new Date()
   const yesterday = new Date(today)
   yesterday.setDate(today.getDate() - 1)
@@ -129,15 +158,48 @@ export default function FeedSummaryModal({ open, onClose, entries }: FeedSummary
   const todaySummary = buildSummary(entries, today, 'Today')
   const yesterdaySummary = buildSummary(entries, yesterday, 'Yesterday')
 
+  const historyDays = getHistoryDays(entries)
+
   return (
-    <BottomSheet open={open} onClose={onClose} title="Summary">
-      <div className="flex flex-col gap-3">
-        <SummaryCard s={todaySummary} isToday />
-        <SummaryCard s={yesterdaySummary} />
-        <Button variant="outline" className="w-full h-11 mt-1" onClick={onClose}>
-          Close
-        </Button>
-      </div>
-    </BottomSheet>
+    <>
+      <BottomSheet
+        open={open}
+        onClose={onClose}
+        title="Summary"
+        headerAction={
+          <button
+            onClick={() => setAllHistoryOpen(true)}
+            className="text-sm font-medium text-foreground"
+          >
+            View all
+          </button>
+        }
+      >
+        <div className="flex flex-col gap-3">
+          <SummaryCard s={todaySummary} isToday />
+          <SummaryCard s={yesterdaySummary} />
+          <Button variant="outline" className="w-full h-11 mt-1" onClick={onClose}>
+            Close
+          </Button>
+        </div>
+      </BottomSheet>
+
+      <FullScreenSheet
+        open={allHistoryOpen}
+        onClose={() => setAllHistoryOpen(false)}
+        title="All history"
+      >
+        <div className="flex flex-col gap-3 pb-2">
+          {historyDays.map((day) => {
+            const label = formatDayLabel(day)
+            const summary = buildSummary(entries, day, label)
+            return <SummaryCard key={label} s={summary} />
+          })}
+          {historyDays.length === 0 && (
+            <p className="text-sm text-muted-foreground text-center py-8">No entries yet</p>
+          )}
+        </div>
+      </FullScreenSheet>
+    </>
   )
 }
