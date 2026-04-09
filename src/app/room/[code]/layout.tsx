@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import TabBar from '@/components/layout/TabBar'
 import SwitchRoomModal from '@/components/shared/SwitchRoomModal'
 import { Toaster } from 'sonner'
@@ -55,12 +56,20 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
         <div className="bg-background">
           <div className="h-12 flex items-center justify-between px-4 md:px-8 border-b border-border">
             <span className="text-xl font-semibold tracking-wide">Lilmo</span>
-            <button
-              onClick={() => setSwitchOpen(true)}
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Spouse ID
-            </button>
+            <div className="flex items-center gap-4">
+              <Link
+                href={`/room/${code}/releases`}
+                className="hidden md:inline text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Releases
+              </Link>
+              <button
+                onClick={() => setSwitchOpen(true)}
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Spouse ID
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -19,9 +19,9 @@ export default function FullScreenSheet({ open, onClose, title, children }: Full
     <Sheet open={open} onOpenChange={(o) => { if (!o) onClose() }}>
       <SheetContent
         side="bottom"
-        className="inset-x-0 bottom-0 h-[96svh] rounded-t-2xl rounded-b-none flex flex-col p-0 max-h-none overflow-hidden"
+        className="inset-x-0 bottom-0 h-[96svh] rounded-t-2xl rounded-b-none flex flex-col p-0 gap-0 max-h-none overflow-hidden"
       >
-        <div className="px-4 border-b border-border shrink-0">
+        <div className="px-4 py-[2px] border-b border-border shrink-0">
           <SheetTitle className="text-lg font-semibold leading-[44px]">{title}</SheetTitle>
         </div>
 
