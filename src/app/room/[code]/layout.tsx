@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { ChevronLeft } from 'lucide-react'
 import TabBar from '@/components/layout/TabBar'
 import SwitchRoomModal from '@/components/shared/SwitchRoomModal'
 import { Toaster } from 'sonner'
@@ -32,6 +34,9 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
   const { code } = params
   const [switchOpen, setSwitchOpen] = useState(false)
   const isOnline = useOnlineStatus()
+  const pathname = usePathname()
+  const router = useRouter()
+  const isReleases = pathname.endsWith('/releases')
 
   // Auto-save room code when visiting the URL directly (e.g. shared link)
   useEffect(() => {
@@ -54,27 +59,40 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
           </div>
         </div>
         <div className="bg-background">
-          <div className="h-12 flex items-center justify-between px-4 md:px-8 border-b border-border">
-            <span className="text-xl font-semibold tracking-wide">Lilmo</span>
-            <div className="flex items-center gap-4">
-              <Link
-                href={`/room/${code}/releases`}
-                className="hidden md:inline text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Releases
-              </Link>
+          {isReleases ? (
+            <div className="h-12 flex items-center px-4 md:px-8 border-b border-border">
               <button
-                onClick={() => setSwitchOpen(true)}
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                onClick={() => router.back()}
+                className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Spouse ID
+                <ChevronLeft className="w-4 h-4" />
+                Back
               </button>
             </div>
-          </div>
+          ) : (
+            <div className="h-12 flex items-center justify-between px-4 md:px-8 border-b border-border">
+              <span className="text-xl font-semibold tracking-wide">Lilmo</span>
+              <div className="flex items-center gap-4">
+                <Link
+                  href={`/room/${code}/releases`}
+                  className="hidden md:inline text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Releases
+                </Link>
+                <button
+                  onClick={() => setSwitchOpen(true)}
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Spouse ID
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      {/* Tab bar scrolls with content */}
-      <TabBar code={code} />
+
+      {/* Tab bar scrolls with content — hidden on releases */}
+      {!isReleases && <TabBar code={code} />}
 
       {/* Content */}
       <div className="flex-1 relative">

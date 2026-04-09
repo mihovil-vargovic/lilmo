@@ -1,7 +1,3 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
-import { ChevronLeft } from 'lucide-react'
 import releases from '@/data/releases'
 
 function formatDate(iso: string): string {
@@ -13,18 +9,8 @@ function formatDate(iso: string): string {
 }
 
 export default function ReleasesPage() {
-  const router = useRouter()
-
   return (
     <div className="max-w-2xl mx-auto px-8 py-6">
-      <button
-        onClick={() => router.back()}
-        className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
-      >
-        <ChevronLeft className="w-4 h-4" />
-        Back
-      </button>
-
       <h1 className="text-2xl font-semibold mb-8">Release notes</h1>
 
       <div className="flex flex-col gap-6">
