@@ -8,6 +8,13 @@ import { generateRoomCode, createRoom, roomExists, getOrCreateDeviceId, canDevic
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
+async function hashString(str: string): Promise<string> {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(str)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('')
+}
+
 function JoinPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -15,8 +22,29 @@ function JoinPageContent() {
   const [joinError, setJoinError] = useState('')
   const [creating, setCreating] = useState(false)
   const [joining, setJoining] = useState(false)
+  const [titleTaps, setTitleTaps] = useState(0)
+  const [bypassInput, setBypassInput] = useState('')
+  const [bypassed, setBypassed] = useState(false)
 
   const isBlocked = searchParams.get('blocked') === '1'
+
+  const handleTitleTap = () => {
+    const next = titleTaps + 1
+    setTitleTaps(next)
+    if (next >= 7) setTitleTaps(0)
+  }
+
+  const handleBypassSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const hash = await hashString(bypassInput.trim())
+    if (hash === process.env.NEXT_PUBLIC_BYPASS_HASH) {
+      setBypassed(true)
+      setTitleTaps(0)
+      setBypassInput('')
+    } else {
+      setBypassInput('')
+    }
+  }
 
   const saveRoom = (code: string) => {
     localStorage.setItem('lilmo_room', code)
@@ -24,7 +52,7 @@ function JoinPageContent() {
   }
 
   const handleCreate = async () => {
-    if (!isLocalhost() && !isAppleDevice(navigator.userAgent)) {
+    if (!bypassed && !isLocalhost() && !isAppleDevice(navigator.userAgent)) {
       return
     }
     setCreating(true)
@@ -32,8 +60,10 @@ function JoinPageContent() {
       const code = generateRoomCode()
       await createRoom(code)
       saveRoom(code)
-      const deviceId = getOrCreateDeviceId()
-      await registerDevice(code, deviceId)
+      if (!bypassed && !isLocalhost()) {
+        const deviceId = getOrCreateDeviceId()
+        await registerDevice(code, deviceId)
+      }
       router.push(`/room/${code}/feed`)
     } catch (e) {
       console.error(e)
@@ -48,7 +78,7 @@ function JoinPageContent() {
       setJoinError('Please enter a valid 6-digit code.')
       return
     }
-    if (!isLocalhost() && !isAppleDevice(navigator.userAgent)) {
+    if (!bypassed && !isLocalhost() && !isAppleDevice(navigator.userAgent)) {
       setJoinError('Lilmo is only available on Apple devices.')
       return
     }
@@ -60,7 +90,7 @@ function JoinPageContent() {
       setJoining(false)
       return
     }
-    if (!isLocalhost()) {
+    if (!bypassed && !isLocalhost()) {
       const deviceId = getOrCreateDeviceId()
       const { allowed, isNew } = await canDeviceJoin(trimmed, deviceId)
       if (!allowed) {
@@ -79,10 +109,32 @@ function JoinPageContent() {
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm space-y-6">
-        {/* Header */}
+        {/* Header — tap 7× to reveal bypass input */}
         <div className="text-center">
-          <h1 className="text-4xl font-semibold tracking-tight">Lilmo</h1>
+          <h1
+            className="text-4xl font-semibold tracking-tight select-none"
+            onClick={handleTitleTap}
+          >
+            Lilmo
+          </h1>
+          {bypassed && (
+            <p className="text-xs text-muted-foreground mt-1">✓</p>
+          )}
         </div>
+
+        {/* Hidden bypass input — appears after 7 taps */}
+        {titleTaps >= 7 && !bypassed && (
+          <form onSubmit={handleBypassSubmit}>
+            <input
+              type="password"
+              autoFocus
+              value={bypassInput}
+              onChange={(e) => setBypassInput(e.target.value)}
+              className="w-full px-3 py-2 text-center border border-input rounded-md outline-none bg-background text-sm"
+              placeholder="···"
+            />
+          </form>
+        )}
 
         {/* Blocked banner */}
         {isBlocked && (
