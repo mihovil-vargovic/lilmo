@@ -8,7 +8,7 @@ import TabBar from '@/components/layout/TabBar'
 import SwitchRoomModal from '@/components/shared/SwitchRoomModal'
 import { Toaster } from 'sonner'
 import { cn } from '@/lib/utils'
-import { getOrCreateDeviceId, canDeviceJoin, registerDevice, isAppleDevice } from '@/lib/roomCode'
+import { getOrCreateDeviceId, canDeviceJoin, registerDevice, isAppleDevice, isLocalhost } from '@/lib/roomCode'
 
 function useOnlineStatus() {
   const [isOnline, setIsOnline] = useState(true)
@@ -43,6 +43,10 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
   // Also enforces 2-device limit — redirects if blocked
   useEffect(() => {
     async function checkAndSave() {
+      if (isLocalhost()) {
+        localStorage.setItem('lilmo_room', code)
+        return
+      }
       if (!isAppleDevice(navigator.userAgent)) {
         router.replace('/join?blocked=1')
         return

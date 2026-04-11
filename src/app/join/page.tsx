@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 
 import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { generateRoomCode, createRoom, roomExists, getOrCreateDeviceId, canDeviceJoin, registerDevice, isAppleDevice } from '@/lib/roomCode'
+import { generateRoomCode, createRoom, roomExists, getOrCreateDeviceId, canDeviceJoin, registerDevice, isAppleDevice, isLocalhost } from '@/lib/roomCode'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -24,7 +24,7 @@ function JoinPageContent() {
   }
 
   const handleCreate = async () => {
-    if (!isAppleDevice(navigator.userAgent)) {
+    if (!isLocalhost() && !isAppleDevice(navigator.userAgent)) {
       return
     }
     setCreating(true)
@@ -48,7 +48,7 @@ function JoinPageContent() {
       setJoinError('Please enter a valid 6-digit code.')
       return
     }
-    if (!isAppleDevice(navigator.userAgent)) {
+    if (!isLocalhost() && !isAppleDevice(navigator.userAgent)) {
       setJoinError('Lilmo is only available on Apple devices.')
       return
     }
@@ -60,15 +60,19 @@ function JoinPageContent() {
       setJoining(false)
       return
     }
-    const deviceId = getOrCreateDeviceId()
-    const { allowed, isNew } = await canDeviceJoin(trimmed, deviceId)
-    if (!allowed) {
-      setJoinError('This Spouse ID is already in use on 2 devices.')
-      setJoining(false)
-      return
+    if (!isLocalhost()) {
+      const deviceId = getOrCreateDeviceId()
+      const { allowed, isNew } = await canDeviceJoin(trimmed, deviceId)
+      if (!allowed) {
+        setJoinError('This Spouse ID is already in use on 2 devices.')
+        setJoining(false)
+        return
+      }
+      saveRoom(trimmed)
+      if (isNew) await registerDevice(trimmed, deviceId)
+    } else {
+      saveRoom(trimmed)
     }
-    saveRoom(trimmed)
-    if (isNew) await registerDevice(trimmed, deviceId)
     router.push(`/room/${trimmed}/feed`)
   }
 

@@ -56,6 +56,11 @@ export async function canDeviceJoin(
   return { allowed: false, isNew: false }
 }
 
+export function isLocalhost(): boolean {
+  return typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+}
+
 export function isAppleDevice(ua: string): boolean {
   return /iPhone|iPad|Macintosh/.test(ua)
 }

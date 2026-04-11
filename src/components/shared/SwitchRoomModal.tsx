@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import BottomSheet from '@/components/shared/BottomSheet'
 import { Button } from '@/components/ui/button'
-import { roomExists, getOrCreateDeviceId, canDeviceJoin, registerDevice, resetRoomDevices, parseDeviceLabel, isAppleDevice } from '@/lib/roomCode'
+import { roomExists, getOrCreateDeviceId, canDeviceJoin, registerDevice, resetRoomDevices, parseDeviceLabel, isAppleDevice, isLocalhost } from '@/lib/roomCode'
 import { supabase } from '@/lib/supabase'
 
 interface SwitchRoomModalProps {
@@ -100,7 +100,7 @@ export default function SwitchRoomModal({
     }
     setJoining(true)
     setJoinError('')
-    if (!isAppleDevice(navigator.userAgent)) {
+    if (!isLocalhost() && !isAppleDevice(navigator.userAgent)) {
       setJoinError('Lilmo is only available on Apple devices.')
       setJoining(false)
       return
@@ -111,15 +111,19 @@ export default function SwitchRoomModal({
       setJoining(false)
       return
     }
-    const deviceId = getOrCreateDeviceId()
-    const { allowed, isNew } = await canDeviceJoin(trimmed, deviceId)
-    if (!allowed) {
-      setJoinError('This Spouse ID is already in use on 2 devices.')
-      setJoining(false)
-      return
+    if (!isLocalhost()) {
+      const deviceId = getOrCreateDeviceId()
+      const { allowed, isNew } = await canDeviceJoin(trimmed, deviceId)
+      if (!allowed) {
+        setJoinError('This Spouse ID is already in use on 2 devices.')
+        setJoining(false)
+        return
+      }
+      saveRoom(trimmed)
+      if (isNew) await registerDevice(trimmed, deviceId)
+    } else {
+      saveRoom(trimmed)
     }
-    saveRoom(trimmed)
-    if (isNew) await registerDevice(trimmed, deviceId)
     router.push(`/room/${trimmed}/feed`)
     onClose()
   }

@@ -108,7 +108,7 @@ function TodayCard({ s, poopCount }: { s: DaySummary; poopCount: number }) {
   const bottlePct = s.total > 0 ? 100 - boobiesPct : 0
 
   return (
-    <div className="rounded-xl border border-border p-4 flex flex-col gap-4">
+    <div className="rounded-xl border border-border p-3 flex flex-col gap-4">
       <div>
         <span className="inline-block text-xs font-medium bg-muted text-foreground px-2.5 py-1 rounded-lg mb-3">
           Daily progress
@@ -117,7 +117,7 @@ function TodayCard({ s, poopCount }: { s: DaySummary; poopCount: number }) {
         {s.total === 0 && !hasPoop ? (
           <p className="text-xl text-muted-foreground">Nothing logged today yet.</p>
         ) : (
-          <p className="text-[20px] leading-[32px]">
+          <p className="text-[18px] leading-[26px]">
             {s.total > 0 && (
               <>
                 Lilmo had <FoodIcon /><strong>{s.total}</strong> feeding{s.total !== 1 ? 's' : ''}
@@ -152,7 +152,7 @@ function TodayCard({ s, poopCount }: { s: DaySummary; poopCount: number }) {
                   <span className="w-2 h-2 rounded-full bg-[#111] shrink-0" />
                   <span className="text-xs text-muted-foreground">Boobies total</span>
                 </div>
-                <span className="text-2xl font-semibold">{s.boobiesMinutes} min</span>
+                <span className="text-[20px] font-semibold">{s.boobiesMinutes} min</span>
               </div>
             )}
             {s.bottleCount > 0 && (
@@ -161,7 +161,7 @@ function TodayCard({ s, poopCount }: { s: DaySummary; poopCount: number }) {
                   <span className="w-2 h-2 rounded-full bg-[#888] shrink-0" />
                   <span className="text-xs text-muted-foreground">Bottle total</span>
                 </div>
-                <span className="text-2xl font-semibold">{s.bottleMl} ml</span>
+                <span className="text-[20px] font-semibold">{s.bottleMl} ml</span>
               </div>
             )}
           </div>
