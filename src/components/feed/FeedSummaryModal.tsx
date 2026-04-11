@@ -117,7 +117,7 @@ function TodayCard({ s, poopCount }: { s: DaySummary; poopCount: number }) {
         {s.total === 0 && !hasPoop ? (
           <p className="text-xl text-muted-foreground">Nothing logged today yet.</p>
         ) : (
-          <p className="text-2xl leading-relaxed">
+          <p className="text-[20px] leading-[32px]">
             {s.total > 0 && (
               <>
                 Lilmo had <FoodIcon /><strong>{s.total}</strong> feeding{s.total !== 1 ? 's' : ''}
