@@ -32,14 +32,14 @@ function JoinPageContent() {
     setTitleTaps(prev => prev + 1)
   }
 
-  const handleBypassSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const hash = await hashString(bypassInput.trim())
+  const handleBypassChange = async (value: string) => {
+    setBypassInput(value)
+    const hash = await hashString(value.trim())
     if (hash === process.env.NEXT_PUBLIC_BYPASS_HASH) {
       setBypassed(true)
+      setTitleTaps(0)
+      setBypassInput('')
     }
-    setTitleTaps(0)
-    setBypassInput('')
   }
 
   const saveRoom = (code: string) => {
@@ -121,16 +121,14 @@ function JoinPageContent() {
 
         {/* Hidden bypass input — appears after 7 taps */}
         {titleTaps >= 7 && !bypassed && (
-          <form onSubmit={handleBypassSubmit}>
-            <input
-              type="password"
-              autoFocus
-              value={bypassInput}
-              onChange={(e) => setBypassInput(e.target.value)}
-              className="w-full px-3 py-2 text-center border border-input rounded-md outline-none bg-background text-sm"
-              placeholder="···"
-            />
-          </form>
+          <input
+            type="password"
+            autoFocus
+            value={bypassInput}
+            onChange={(e) => handleBypassChange(e.target.value)}
+            className="w-full px-3 py-2 text-center border border-input rounded-md outline-none bg-background text-sm"
+            placeholder="···"
+          />
         )}
 
         {/* Blocked banner */}
