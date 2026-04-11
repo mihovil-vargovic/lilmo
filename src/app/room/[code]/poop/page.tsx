@@ -2,7 +2,10 @@
 
 import { useState } from 'react'
 import PoopList from '@/components/poop/PoopList'
-import StickyAddButton from '@/components/layout/StickyAddButton'
+import PoopSummaryModal from '@/components/poop/PoopSummaryModal'
+import { usePoopEntries } from '@/hooks/usePoopEntries'
+import { useScrollHide } from '@/hooks/useScrollHide'
+import { cn } from '@/lib/utils'
 
 interface PoopPageProps {
   params: { code: string }
@@ -11,6 +14,9 @@ interface PoopPageProps {
 export default function PoopPage({ params }: PoopPageProps) {
   const { code } = params
   const [showPopover, setShowPopover] = useState(false)
+  const [showSummary, setShowSummary] = useState(false)
+  const { entries, loading, addEntry, updateEntry, deleteEntry } = usePoopEntries(code)
+  const { primary, secondary } = useScrollHide()
 
   return (
     <>
@@ -19,7 +25,46 @@ export default function PoopPage({ params }: PoopPageProps) {
         showPopover={showPopover}
         onClosePopover={() => setShowPopover(false)}
       />
-      <StickyAddButton onClick={() => setShowPopover(true)} label="Log diaper" />
+
+      {/* Log diaper button — centered */}
+      <div
+        className={cn(
+          'fixed left-1/2 -translate-x-1/2 z-40 transition-all duration-300',
+          primary ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+        )}
+        style={{ bottom: 'calc(1.5rem + env(safe-area-inset-bottom))' }}
+      >
+        <button
+          onClick={() => setShowPopover(true)}
+          className="h-12 w-36 rounded-full bg-primary text-primary-foreground text-sm font-medium shadow-[0_4px_20px_rgba(0,0,0,0.25)]"
+        >
+          Log diaper
+        </button>
+      </div>
+
+      {/* Summary button — far right */}
+      <div
+        className={cn(
+          'fixed right-6 z-40 transition-all duration-300',
+          secondary ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+        )}
+        style={{ bottom: 'calc(1.5rem + env(safe-area-inset-bottom))' }}
+      >
+        <button
+          onClick={() => setShowSummary(true)}
+          className="w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex items-center justify-center"
+          aria-label="Summary"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/baby-icon.png" alt="Summary" width={20} height={20} />
+        </button>
+      </div>
+
+      <PoopSummaryModal
+        open={showSummary}
+        onClose={() => setShowSummary(false)}
+        entries={entries}
+      />
     </>
   )
 }

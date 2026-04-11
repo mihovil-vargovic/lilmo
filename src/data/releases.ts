@@ -6,6 +6,10 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-11',
+    description: 'Summary button and diaper stats are now available on the Diaper tab, matching the Food tab.',
+  },
+  {
+    date: '2026-04-11',
     description: 'Delete confirmation now loads instantly — illustration compressed from 340KB to 83KB.',
   },
   {
