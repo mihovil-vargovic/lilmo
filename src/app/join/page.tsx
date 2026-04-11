@@ -29,9 +29,7 @@ function JoinPageContent() {
   const isBlocked = searchParams.get('blocked') === '1'
 
   const handleTitleTap = () => {
-    const next = titleTaps + 1
-    setTitleTaps(next)
-    if (next >= 7) setTitleTaps(0)
+    setTitleTaps(prev => prev + 1)
   }
 
   const handleBypassSubmit = async (e: React.FormEvent) => {
@@ -39,11 +37,9 @@ function JoinPageContent() {
     const hash = await hashString(bypassInput.trim())
     if (hash === process.env.NEXT_PUBLIC_BYPASS_HASH) {
       setBypassed(true)
-      setTitleTaps(0)
-      setBypassInput('')
-    } else {
-      setBypassInput('')
     }
+    setTitleTaps(0)
+    setBypassInput('')
   }
 
   const saveRoom = (code: string) => {
@@ -112,8 +108,9 @@ function JoinPageContent() {
         {/* Header — tap 7× to reveal bypass input */}
         <div className="text-center">
           <h1
-            className="text-4xl font-semibold tracking-tight select-none"
-            onClick={handleTitleTap}
+            className="text-4xl font-semibold tracking-tight cursor-default"
+            style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+            onPointerDown={(e) => { e.preventDefault(); handleTitleTap() }}
           >
             Lilmo
           </h1>
