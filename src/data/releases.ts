@@ -5,6 +5,14 @@ export interface Release {
 
 const releases: Release[] = [
   {
+    date: '2026-04-11',
+    description: 'Delete confirmation now loads instantly — illustration compressed from 340KB to 83KB.',
+  },
+  {
+    date: '2026-04-11',
+    description: 'Spouse ID is now limited to 4 devices, Apple devices only. Registered devices visible in the Spouse ID modal with device type and join date.',
+  },
+  {
     date: '2026-04-09',
     description: 'Added All History view to the Summary sheet, showing a full day-by-day feed breakdown.',
   },

@@ -14,3 +14,7 @@ Do all of this without asking for confirmation. The user wants one-word commits 
 
 The working directory for git commands is:
 `/Users/mihovilhome/Library/CloudStorage/GoogleDrive-mihovilvargovic@gmail.com/My Drive/Claude/lilmo/app`
+
+## Release notes
+
+Before every commit, always update `src/data/releases.ts` with a new entry describing what changed. Use today's date. Write it in plain language for the user, not technical jargon. Add it at the top of the array.
