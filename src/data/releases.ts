@@ -6,6 +6,10 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-11',
+    description: 'Summary now shows a Daily progress card with a narrative of today\'s feedings and diaper count. Yesterday moved to All history.',
+  },
+  {
+    date: '2026-04-11',
     description: 'Summary button and diaper stats are now available on the Diaper tab, matching the Food tab.',
   },
   {

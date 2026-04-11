@@ -5,6 +5,7 @@ import FeedList from '@/components/feed/FeedList'
 import FeedSummaryModal from '@/components/feed/FeedSummaryModal'
 import StickyAddButton from '@/components/layout/StickyAddButton'
 import { useFeedEntries } from '@/hooks/useFeedEntries'
+import { usePoopEntries } from '@/hooks/usePoopEntries'
 import { useScrollHide } from '@/hooks/useScrollHide'
 import { cn } from '@/lib/utils'
 
@@ -17,6 +18,7 @@ export default function FeedPage({ params }: FeedPageProps) {
   const [showPopover, setShowPopover] = useState(false)
   const [showSummary, setShowSummary] = useState(false)
   const { entries, loading, addEntry, updateEntry, deleteEntry } = useFeedEntries(code)
+  const { entries: poopEntries } = usePoopEntries(code)
   const { primary, secondary } = useScrollHide()
 
   return (
@@ -69,6 +71,7 @@ export default function FeedPage({ params }: FeedPageProps) {
         open={showSummary}
         onClose={() => setShowSummary(false)}
         entries={entries}
+        poopEntries={poopEntries}
       />
     </>
   )

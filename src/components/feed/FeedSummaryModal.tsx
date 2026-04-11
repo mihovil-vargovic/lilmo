@@ -4,12 +4,13 @@ import { useState } from 'react'
 import BottomSheet from '@/components/shared/BottomSheet'
 import FullScreenSheet from '@/components/shared/FullScreenSheet'
 import { Button } from '@/components/ui/button'
-import { FeedEntry } from '@/types'
+import { FeedEntry, PoopEntry } from '@/types'
 
 interface FeedSummaryModalProps {
   open: boolean
   onClose: () => void
   entries: FeedEntry[]
+  poopEntries?: PoopEntry[]
 }
 
 interface DaySummary {
@@ -19,6 +20,17 @@ interface DaySummary {
   bottleCount: number
   boobiesMinutes: number
   bottleMl: number
+}
+
+function buildPoopCount(entries: PoopEntry[], date: Date): number {
+  const start = new Date(date)
+  start.setHours(0, 0, 0, 0)
+  const end = new Date(date)
+  end.setHours(23, 59, 59, 999)
+  return entries.filter((e) => {
+    const t = new Date(e.logged_at)
+    return t >= start && t <= end && (e.type === 'poop' || e.type === 'poop_and_pee')
+  }).length
 }
 
 function buildSummary(entries: FeedEntry[], date: Date, label: string): DaySummary {
@@ -66,6 +78,47 @@ function formatDayLabel(date: Date): string {
     day: 'numeric',
     ...(!isCurrentYear ? { year: 'numeric' } : {}),
   })
+}
+
+function TodayCard({ s, poopCount }: { s: DaySummary; poopCount: number }) {
+  const hasBottle = s.bottleMl > 0
+  const hasBoobies = s.boobiesMinutes > 0
+  const hasPoop = poopCount > 0
+
+  return (
+    <div className="rounded-xl border border-border p-4">
+      <span className="inline-block text-xs font-medium bg-muted text-foreground px-2.5 py-1 rounded-lg mb-3">
+        Daily progress
+      </span>
+
+      {s.total === 0 && !hasPoop ? (
+        <p className="text-xl text-muted-foreground">Nothing logged today yet.</p>
+      ) : (
+        <p className="text-2xl leading-relaxed">
+          {s.total > 0 && (
+            <>
+              Lilmo had <strong>{s.total}</strong> feeding{s.total !== 1 ? 's' : ''}
+              {(hasBottle || hasBoobies) && (
+                <>
+                  ,{' '}
+                  {hasBottle && <><strong>{s.bottleMl}ml</strong> from the bottle</>}
+                  {hasBottle && hasBoobies && ' and '}
+                  {hasBoobies && <><strong>{s.boobiesMinutes} min</strong> on the boobies</>}
+                </>
+              )}
+              .
+            </>
+          )}
+          {hasPoop && (
+            <>
+              {s.total > 0 ? ' He also pooped ' : 'He pooped '}
+              <strong>{poopCount}</strong> time{poopCount !== 1 ? 's' : ''}, making dad very proud.
+            </>
+          )}
+        </p>
+      )}
+    </div>
+  )
 }
 
 function HalftoneBar({ boobiesPct, bottlePct, uid }: { boobiesPct: number; bottlePct: number; uid: string }) {
@@ -148,15 +201,13 @@ function SummaryCard({ s, isToday }: { s: DaySummary; isToday?: boolean }) {
   )
 }
 
-export default function FeedSummaryModal({ open, onClose, entries }: FeedSummaryModalProps) {
+export default function FeedSummaryModal({ open, onClose, entries, poopEntries = [] }: FeedSummaryModalProps) {
   const [allHistoryOpen, setAllHistoryOpen] = useState(false)
 
   const today = new Date()
-  const yesterday = new Date(today)
-  yesterday.setDate(today.getDate() - 1)
 
   const todaySummary = buildSummary(entries, today, 'Today')
-  const yesterdaySummary = buildSummary(entries, yesterday, 'Yesterday')
+  const todayPoopCount = buildPoopCount(poopEntries, today)
 
   const historyDays = getHistoryDays(entries)
 
@@ -176,8 +227,7 @@ export default function FeedSummaryModal({ open, onClose, entries }: FeedSummary
         }
       >
         <div className="flex flex-col gap-3">
-          <SummaryCard s={todaySummary} isToday />
-          <SummaryCard s={yesterdaySummary} />
+          <TodayCard s={todaySummary} poopCount={todayPoopCount} />
           <Button variant="outline" className="w-full h-11 mt-1" onClick={onClose}>
             Close
           </Button>
