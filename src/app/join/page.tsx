@@ -2,13 +2,13 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect } from 'react'
+import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { generateRoomCode, createRoom, roomExists, getOrCreateDeviceId, canDeviceJoin, registerDevice, isAppleDevice } from '@/lib/roomCode'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-export default function JoinPage() {
+function JoinPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [joinCode, setJoinCode] = useState('')
@@ -83,7 +83,7 @@ export default function JoinPage() {
         {/* Blocked banner */}
         {isBlocked && (
           <div className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
-            This Spouse ID is already in use on 2 devices. Ask your partner to reset access from their Spouse ID settings.
+            This Spouse ID is already in use on 4 devices. Ask your partner to reset access from their Spouse ID settings.
           </div>
         )}
 
@@ -152,5 +152,13 @@ export default function JoinPage() {
         </Card>
       </div>
     </div>
+  )
+}
+
+export default function JoinPage() {
+  return (
+    <Suspense>
+      <JoinPageContent />
+    </Suspense>
   )
 }
