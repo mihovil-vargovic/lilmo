@@ -115,7 +115,7 @@ export default function SwitchRoomModal({
       const deviceId = getOrCreateDeviceId()
       const { allowed, isNew } = await canDeviceJoin(trimmed, deviceId)
       if (!allowed) {
-        setJoinError('This Spouse ID is already in use on 2 devices.')
+        setJoinError('This Spouse ID is already in use on 4 devices.')
         setJoining(false)
         return
       }
