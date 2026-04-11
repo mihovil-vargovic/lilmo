@@ -8,6 +8,7 @@ import TabBar from '@/components/layout/TabBar'
 import SwitchRoomModal from '@/components/shared/SwitchRoomModal'
 import { Toaster } from 'sonner'
 import { cn } from '@/lib/utils'
+import { getOrCreateDeviceId, canDeviceJoin, registerDevice, isAppleDevice } from '@/lib/roomCode'
 
 function useOnlineStatus() {
   const [isOnline, setIsOnline] = useState(true)
@@ -39,10 +40,25 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
   const isReleases = pathname.endsWith('/releases')
 
   // Auto-save room code when visiting the URL directly (e.g. shared link)
+  // Also enforces 2-device limit — redirects if blocked
   useEffect(() => {
-    localStorage.setItem('lilmo_room', code)
-    document.cookie = `lilmo_room=${code}; path=/; max-age=31536000`
-  }, [code])
+    async function checkAndSave() {
+      if (!isAppleDevice(navigator.userAgent)) {
+        router.replace('/join?blocked=1')
+        return
+      }
+      const deviceId = getOrCreateDeviceId()
+      const { allowed, isNew } = await canDeviceJoin(code, deviceId)
+      if (!allowed) {
+        router.replace('/join?blocked=1')
+        return
+      }
+      localStorage.setItem('lilmo_room', code)
+      document.cookie = `lilmo_room=${code}; path=/; max-age=31536000`
+      if (isNew) await registerDevice(code, deviceId)
+    }
+    checkAndSave()
+  }, [code, router])
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

@@ -2,18 +2,21 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { generateRoomCode, createRoom, roomExists } from '@/lib/roomCode'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { generateRoomCode, createRoom, roomExists, getOrCreateDeviceId, canDeviceJoin, registerDevice, isAppleDevice } from '@/lib/roomCode'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function JoinPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [joinCode, setJoinCode] = useState('')
   const [joinError, setJoinError] = useState('')
   const [creating, setCreating] = useState(false)
   const [joining, setJoining] = useState(false)
+
+  const isBlocked = searchParams.get('blocked') === '1'
 
   const saveRoom = (code: string) => {
     localStorage.setItem('lilmo_room', code)
@@ -21,11 +24,16 @@ export default function JoinPage() {
   }
 
   const handleCreate = async () => {
+    if (!isAppleDevice(navigator.userAgent)) {
+      return
+    }
     setCreating(true)
     try {
       const code = generateRoomCode()
       await createRoom(code)
       saveRoom(code)
+      const deviceId = getOrCreateDeviceId()
+      await registerDevice(code, deviceId)
       router.push(`/room/${code}/feed`)
     } catch (e) {
       console.error(e)
@@ -40,6 +48,10 @@ export default function JoinPage() {
       setJoinError('Please enter a valid 6-digit code.')
       return
     }
+    if (!isAppleDevice(navigator.userAgent)) {
+      setJoinError('Lilmo is only available on Apple devices.')
+      return
+    }
     setJoining(true)
     setJoinError('')
     const exists = await roomExists(trimmed)
@@ -48,7 +60,15 @@ export default function JoinPage() {
       setJoining(false)
       return
     }
+    const deviceId = getOrCreateDeviceId()
+    const { allowed, isNew } = await canDeviceJoin(trimmed, deviceId)
+    if (!allowed) {
+      setJoinError('This Spouse ID is already in use on 2 devices.')
+      setJoining(false)
+      return
+    }
     saveRoom(trimmed)
+    if (isNew) await registerDevice(trimmed, deviceId)
     router.push(`/room/${trimmed}/feed`)
   }
 
@@ -59,6 +79,13 @@ export default function JoinPage() {
         <div className="text-center">
           <h1 className="text-4xl font-semibold tracking-tight">Lilmo</h1>
         </div>
+
+        {/* Blocked banner */}
+        {isBlocked && (
+          <div className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            This Spouse ID is already in use on 2 devices. Ask your partner to reset access from their Spouse ID settings.
+          </div>
+        )}
 
         {/* Create room */}
         <Card className="border border-border rounded-lg">

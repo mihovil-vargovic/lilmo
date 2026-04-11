@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import BottomSheet from '@/components/shared/BottomSheet'
 import { Button } from '@/components/ui/button'
-import { roomExists } from '@/lib/roomCode'
+import { roomExists, getOrCreateDeviceId, canDeviceJoin, registerDevice, resetRoomDevices, parseDeviceLabel, isAppleDevice } from '@/lib/roomCode'
+import { supabase } from '@/lib/supabase'
 
 interface SwitchRoomModalProps {
   open: boolean
@@ -47,13 +48,21 @@ export default function SwitchRoomModal({
   const [joinCode, setJoinCode] = useState('')
   const [joinError, setJoinError] = useState('')
   const [joining, setJoining] = useState(false)
+  const [resetting, setResetting] = useState(false)
+  const [devices, setDevices] = useState<{ device_id: string; user_agent: string | null; joined_at: string }[]>([])
 
   useEffect(() => {
     if (!open) {
       setJoinCode('')
       setJoinError('')
+      return
     }
-  }, [open])
+    supabase
+      .from('room_devices')
+      .select('device_id, user_agent, joined_at')
+      .eq('room_code', currentCode)
+      .then(({ data }) => setDevices(data || []))
+  }, [open, currentCode])
 
   const handleCopy = async () => {
     try {
@@ -91,13 +100,26 @@ export default function SwitchRoomModal({
     }
     setJoining(true)
     setJoinError('')
+    if (!isAppleDevice(navigator.userAgent)) {
+      setJoinError('Lilmo is only available on Apple devices.')
+      setJoining(false)
+      return
+    }
     const exists = await roomExists(trimmed)
     if (!exists) {
       setJoinError('Room not found. Check the code and try again.')
       setJoining(false)
       return
     }
+    const deviceId = getOrCreateDeviceId()
+    const { allowed, isNew } = await canDeviceJoin(trimmed, deviceId)
+    if (!allowed) {
+      setJoinError('This Spouse ID is already in use on 2 devices.')
+      setJoining(false)
+      return
+    }
     saveRoom(trimmed)
+    if (isNew) await registerDevice(trimmed, deviceId)
     router.push(`/room/${trimmed}/feed`)
     onClose()
   }
@@ -133,6 +155,26 @@ export default function SwitchRoomModal({
           </div>
         </div>
 
+        {/* Registered devices */}
+        {devices.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-sm font-medium">Registered devices <span className="text-muted-foreground font-normal">{devices.length}/4</span></p>
+            <div className="space-y-1">
+              {devices.map((d) => {
+                const isThis = d.device_id === getOrCreateDeviceId()
+                const label = d.user_agent ? parseDeviceLabel(d.user_agent) : 'Unknown device'
+                const date = new Date(d.joined_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+                return (
+                  <div key={d.device_id} className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-muted text-sm">
+                    <span>{label}{isThis && <span className="ml-2 text-xs text-muted-foreground">(this device)</span>}</span>
+                    <span className="text-xs text-muted-foreground">{date}</span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Join another room */}
         <div className="space-y-2">
           <p className="text-sm font-medium">Join your Spouse</p>
@@ -164,6 +206,27 @@ export default function SwitchRoomModal({
               </Button>
             </form>
           </div>
+        </div>
+
+        {/* Reset access */}
+        <div className="border-t border-border pt-4 space-y-2">
+          <p className="text-xs text-muted-foreground">
+            Having trouble? If your partner got a new phone and can't join, reset access to allow re-registration.
+          </p>
+          <button
+            onClick={async () => {
+              setResetting(true)
+              try {
+                await resetRoomDevices(currentCode)
+              } finally {
+                setResetting(false)
+              }
+            }}
+            disabled={resetting}
+            className="text-xs text-destructive hover:underline disabled:opacity-50"
+          >
+            {resetting ? 'Resetting…' : 'Reset room access'}
+          </button>
         </div>
 
         {/* Cancel */}
