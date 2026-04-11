@@ -25,7 +25,7 @@ export default function DeleteConfirmSheet({ open, onCancel, onConfirm }: Delete
           className="px-4 pt-6 pb-4 [&>button]:hidden md:inset-0 md:m-auto md:w-[520px] md:h-fit md:rounded-2xl md:data-[state=open]:slide-in-from-bottom-[50px] md:data-[state=closed]:slide-out-to-bottom-[50px]"
         >
           <div className="-mx-4 -mt-6 mb-5 overflow-hidden rounded-t-2xl">
-            <Image src="/delete-illustration.png" alt="" width={600} height={300} className="w-full h-auto" />
+            <Image src="/delete-illustration.webp" alt="" width={600} height={341} priority className="w-full h-auto" />
           </div>
           <div className="flex flex-col gap-1 mb-5">
             <h2 className="text-base font-semibold">Delete entry</h2>
