@@ -53,6 +53,7 @@ export default function FeedList({
   }
 
   const groups = groupByDay(entries)
+  const lastPastEntry = entries.find(e => new Date(e.logged_at) <= new Date())
 
   if (loading) {
     return (
@@ -76,8 +77,8 @@ export default function FeedList({
         <div className="pb-28">
           {groups.map((group, groupIndex) => (
             <DayGroup key={group.date} label={group.label}>
-              {groupIndex === 0 && group.entries.length > 0 && (
-                <NextFeedRow loggedAt={group.entries[0].logged_at} />
+              {groupIndex === 0 && lastPastEntry && (
+                <NextFeedRow loggedAt={lastPastEntry.logged_at} />
               )}
               {group.entries.map((entry, entryIndex) => (
                 <div key={entry.id}>
