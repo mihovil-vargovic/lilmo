@@ -6,7 +6,7 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-12',
-    description: 'Bottom sheets now open and close with a smoother iOS-style spring animation. Summary button icon nudged 1px up on both tabs. Food and poop icons in Daily progress card adjusted 1px up.',
+    description: 'Bottom sheets now open and close with a proper iOS spring animation — snappy close, soft spring open.',
   },
   {
     date: '2026-04-12',
