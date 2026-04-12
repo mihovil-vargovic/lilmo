@@ -33,6 +33,13 @@ export default function PoopConfirmPopover({
   onUpdate,
 }: PoopConfirmPopoverProps) {
   const [time, setTime] = useState<Date>(roundToNearest5(new Date()))
+
+  const handleTimeChange = (newTime: Date) => {
+    if (newTime > new Date()) {
+      newTime.setDate(newTime.getDate() - 1)
+    }
+    setTime(newTime)
+  }
   const [selectedType, setSelectedType] = useState<PoopType>('poop_and_pee')
   const [saving, setSaving] = useState(false)
 
@@ -96,7 +103,7 @@ export default function PoopConfirmPopover({
 
         {/* Time picker */}
         <div className="flex items-center justify-center py-2">
-          <TimePicker value={time} onChange={setTime} />
+          <TimePicker value={time} onChange={handleTimeChange} />
         </div>
 
         <div className="flex gap-3">

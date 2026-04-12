@@ -51,6 +51,13 @@ export default function FeedConfirmPopover({
     return `${y}-${m}-${day}`
   }
 
+  const handleTimeChange = (newTime: Date) => {
+    if (newTime > new Date()) {
+      newTime.setDate(newTime.getDate() - 1)
+    }
+    setTime(newTime)
+  }
+
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value) return
     const [y, m, d] = e.target.value.split('-').map(Number)
@@ -105,7 +112,7 @@ export default function FeedConfirmPopover({
         {/* Time picker */}
         <div className="flex items-center justify-center">
           <div className="flex items-center gap-4">
-            <TimePicker value={time} onChange={setTime} />
+            <TimePicker value={time} onChange={handleTimeChange} />
             <div className="relative w-11 h-11">
               <div className="w-11 h-11 flex items-center justify-center rounded-full border border-border text-muted-foreground pointer-events-none">
                 <CalendarDays className="w-5 h-5" />
