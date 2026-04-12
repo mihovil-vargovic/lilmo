@@ -28,7 +28,7 @@ export function groupByDay<T extends { logged_at: string }>(
     .map(([date, entries]) => {
       let label: string
       if (date === todayStr) {
-        label = 'Today'
+        label = ''
       } else if (date === yesterdayStr) {
         label = 'Yesterday'
       } else {

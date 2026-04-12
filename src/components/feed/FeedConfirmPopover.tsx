@@ -18,7 +18,7 @@ interface FeedConfirmPopoverProps {
   onUpdate?: (id: string, loggedAt: Date, feedType: 'bottle' | 'boobies', durationMinutes?: number, amountMl?: number) => Promise<void>
 }
 
-const DURATION_OPTIONS = [5, 10, 15, 20, 25, 30]
+const DURATION_OPTIONS = [5, 10, 15, 20, 25, 30, 35, 40, 45]
 const AMOUNT_OPTIONS = [5, 10, 15, 20, 30, 40, 50, 60]
 
 export default function FeedConfirmPopover({
