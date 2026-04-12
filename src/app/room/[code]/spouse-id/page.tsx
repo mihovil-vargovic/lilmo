@@ -140,9 +140,9 @@ export default function SpouseIdPage({ params }: PageProps) {
   return (
     <div className="pb-16">
       {/* Spouse ID code card */}
-      <div className="px-4 md:px-8 pt-6 pb-2">
-        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Your Spouse ID</p>
-        <div className="flex items-center justify-between px-5 py-4 rounded-2xl bg-muted">
+      <div className="pt-6 pb-2">
+        <p className="text-xs text-muted-foreground uppercase tracking-wide px-8 md:px-12 mb-1.5">Your Spouse ID</p>
+        <div className="flex items-center justify-between px-5 py-4 mx-4 md:mx-8 rounded-2xl bg-muted">
           <span className="text-3xl font-mono font-semibold tracking-[0.35em]">{code}</span>
           <div className="flex items-center gap-1">
             <button
@@ -164,16 +164,16 @@ export default function SpouseIdPage({ params }: PageProps) {
       </div>
 
       {/* Registered devices */}
-      <div className="px-4 md:px-8 pt-6 pb-2">
-        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+      <div className="pt-6 pb-2">
+        <p className="text-xs text-muted-foreground uppercase tracking-wide px-8 md:px-12 mb-1.5">
           Registered devices <span className="normal-case">{devices.length}/4</span>
         </p>
         {devices.length === 0 ? (
-          <div className="px-5 py-4 rounded-2xl bg-muted">
+          <div className="px-5 py-4 mx-4 md:mx-8 rounded-2xl bg-muted">
             <p className="text-sm text-muted-foreground">No registered devices.</p>
           </div>
         ) : (
-          <div className="rounded-2xl bg-muted overflow-hidden">
+          <div className="mx-4 md:mx-8 rounded-2xl bg-muted overflow-hidden">
             {devices.map((d, i) => {
               const isThis = d.device_id === getOrCreateDeviceId()
               const label = d.user_agent ? parseDeviceLabel(d.user_agent) : 'Unknown device'
@@ -195,8 +195,8 @@ export default function SpouseIdPage({ params }: PageProps) {
       </div>
 
       {/* Actions list */}
-      <div className="px-4 md:px-8 pt-4">
-        <div className="rounded-2xl bg-muted overflow-hidden">
+      <div className="pt-6">
+        <div className="mx-4 md:mx-8 rounded-2xl bg-muted overflow-hidden">
           {/* Join your spouse */}
           <button
             onClick={() => { setJoinCode(''); setJoinError(''); setJoinOpen(true) }}
