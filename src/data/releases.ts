@@ -5,6 +5,10 @@ export interface Release {
 
 const releases: Release[] = [
   {
+    date: '2026-04-12',
+    description: 'Diaper tab Summary now shows the same Daily progress card as the Food tab — feedings, bottle/boobies breakdown, and poop count all in one place.',
+  },
+  {
     date: '2026-04-11',
     description: 'Spouse ID is now a full page with a cleaner layout — your code, registered devices, join your spouse, and reset access all in one place.',
   },

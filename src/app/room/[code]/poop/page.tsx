@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import PoopList from '@/components/poop/PoopList'
-import PoopSummaryModal from '@/components/poop/PoopSummaryModal'
+import FeedSummaryModal from '@/components/feed/FeedSummaryModal'
 import { usePoopEntries } from '@/hooks/usePoopEntries'
+import { useFeedEntries } from '@/hooks/useFeedEntries'
 import { useScrollHide } from '@/hooks/useScrollHide'
 import { cn } from '@/lib/utils'
 
@@ -16,6 +17,7 @@ export default function PoopPage({ params }: PoopPageProps) {
   const [showPopover, setShowPopover] = useState(false)
   const [showSummary, setShowSummary] = useState(false)
   const { entries, loading, addEntry, updateEntry, deleteEntry } = usePoopEntries(code)
+  const { entries: feedEntries } = useFeedEntries(code)
   const { primary, secondary } = useScrollHide()
 
   return (
@@ -60,10 +62,11 @@ export default function PoopPage({ params }: PoopPageProps) {
         </button>
       </div>
 
-      <PoopSummaryModal
+      <FeedSummaryModal
         open={showSummary}
         onClose={() => setShowSummary(false)}
-        entries={entries}
+        entries={feedEntries}
+        poopEntries={entries}
       />
     </>
   )
