@@ -88,10 +88,10 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
           </div>
         </div>
         <div className="bg-background">
-          {isReleases || isSpouseId ? (
+          {isReleases ? (
             <div className="h-12 flex items-center px-4 md:px-8 border-b border-border">
               <button
-                onClick={handleBack}
+                onClick={() => router.back()}
                 className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -123,15 +123,32 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
       {/* Tab bar */}
       {!isReleases && !isSpouseId && <TabBar code={code} />}
 
-      {/* Content — children rendered exactly once */}
+      {/* Content */}
       <div className="flex-1 relative">
-        <div
-          ref={isSpouseId ? contentRef : undefined}
-          style={isSpouseId ? { animation: 'slideInFromRight 0.35s cubic-bezier(0.32,0.72,0,1)' } : undefined}
-        >
-          {children}
-        </div>
+        {!isSpouseId && children}
       </div>
+
+      {/* Spouse ID — full-screen overlay slides in as one unit */}
+      {isSpouseId && (
+        <div
+          ref={contentRef}
+          className="fixed inset-0 bg-background z-30 flex flex-col"
+          style={{ animation: 'slideInFromRight 0.35s cubic-bezier(0.32,0.72,0,1)' }}
+        >
+          <div className="shrink-0 h-12 flex items-center px-4 border-b border-border bg-background">
+            <button
+              onClick={handleBack}
+              className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Back
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            {children}
+          </div>
+        </div>
+      )}
 
       <SwitchRoomModal
         open={switchOpen}
