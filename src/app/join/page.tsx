@@ -24,7 +24,9 @@ function JoinPageContent() {
   const [joining, setJoining] = useState(false)
   const [titleTaps, setTitleTaps] = useState(0)
   const [bypassInput, setBypassInput] = useState('')
-  const [bypassed, setBypassed] = useState(false)
+  const [bypassed, setBypassed] = useState(() =>
+    typeof window !== 'undefined' && sessionStorage.getItem('lilmo_bypass') === '1'
+  )
 
   const isBlocked = searchParams.get('blocked') === '1'
 
@@ -49,7 +51,8 @@ function JoinPageContent() {
   }
 
   const handleCreate = async () => {
-    if (!bypassed && !isLocalhost() && !isAppleDevice(navigator.userAgent)) {
+    const isBypassed = sessionStorage.getItem('lilmo_bypass') === '1'
+    if (!isBypassed && !isLocalhost() && !isAppleDevice(navigator.userAgent)) {
       return
     }
     setCreating(true)
@@ -57,7 +60,7 @@ function JoinPageContent() {
       const code = generateRoomCode()
       await createRoom(code)
       saveRoom(code)
-      if (!bypassed && !isLocalhost()) {
+      if (!isBypassed && !isLocalhost()) {
         const deviceId = getOrCreateDeviceId()
         await registerDevice(code, deviceId)
       }
@@ -75,7 +78,8 @@ function JoinPageContent() {
       setJoinError('Please enter a valid 6-digit code.')
       return
     }
-    if (!bypassed && !isLocalhost() && !isAppleDevice(navigator.userAgent)) {
+    const isBypassed = sessionStorage.getItem('lilmo_bypass') === '1'
+    if (!isBypassed && !isLocalhost() && !isAppleDevice(navigator.userAgent)) {
       setJoinError('Lilmo is only available on Apple devices.')
       return
     }
@@ -87,7 +91,7 @@ function JoinPageContent() {
       setJoining(false)
       return
     }
-    if (!bypassed && !isLocalhost()) {
+    if (!isBypassed && !isLocalhost()) {
       const deviceId = getOrCreateDeviceId()
       const { allowed, isNew } = await canDeviceJoin(trimmed, deviceId)
       if (!allowed) {
