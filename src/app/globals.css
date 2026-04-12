@@ -98,6 +98,16 @@
   pointer-events: none;
 }
 
+/* ---- iOS page transition ---- */
+@keyframes slideInFromRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes slideOutToRight {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
+
 /* ---- Poop confetti ---- */
 @keyframes poopFly {
   0%   { transform: translate(0, 0) scale(0.4) rotate(0deg); opacity: 1; }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { ChevronLeft } from 'lucide-react'
@@ -39,9 +39,17 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
   const router = useRouter()
   const isReleases = pathname.endsWith('/releases')
   const isSpouseId = pathname.endsWith('/spouse-id')
+  const contentRef = useRef<HTMLDivElement>(null)
 
-  // Auto-save room code when visiting the URL directly (e.g. shared link)
-  // Also enforces 2-device limit — redirects if blocked
+  const handleBack = () => {
+    if (contentRef.current) {
+      contentRef.current.style.animation = 'slideOutToRight 0.35s cubic-bezier(0.4,0,0.8,1) forwards'
+      setTimeout(() => router.back(), 320)
+    } else {
+      router.back()
+    }
+  }
+
   useEffect(() => {
     async function checkAndSave() {
       if (isLocalhost() || sessionStorage.getItem('lilmo_bypass') === '1' || document.cookie.includes('lilmo_bypass=1')) {
@@ -67,7 +75,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Offline banner + header — sticky together */}
+      {/* Offline banner + header — sticky */}
       <div className="sticky top-0 z-20">
         <div
           className={cn(
@@ -83,7 +91,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
           {isReleases || isSpouseId ? (
             <div className="h-12 flex items-center px-4 md:px-8 border-b border-border">
               <button
-                onClick={() => router.back()}
+                onClick={handleBack}
                 className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -112,12 +120,17 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
         </div>
       </div>
 
-      {/* Tab bar scrolls with content — hidden on releases and spouse-id */}
+      {/* Tab bar */}
       {!isReleases && !isSpouseId && <TabBar code={code} />}
 
-      {/* Content */}
+      {/* Content — children rendered exactly once */}
       <div className="flex-1 relative">
-        {children}
+        <div
+          ref={isSpouseId ? contentRef : undefined}
+          style={isSpouseId ? { animation: 'slideInFromRight 0.35s cubic-bezier(0.32,0.72,0,1)' } : undefined}
+        >
+          {children}
+        </div>
       </div>
 
       <SwitchRoomModal

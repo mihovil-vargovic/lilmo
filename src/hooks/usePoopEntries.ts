@@ -5,9 +5,11 @@ import { v4 as uuidv4 } from 'uuid'
 import { supabase } from '@/lib/supabase'
 import { PoopEntry, PoopType } from '@/types'
 
+const cache = new Map<string, PoopEntry[]>()
+
 export function usePoopEntries(roomCode: string) {
-  const [entries, setEntries] = useState<PoopEntry[]>([])
-  const [loading, setLoading] = useState(true)
+  const [entries, setEntries] = useState<PoopEntry[]>(() => cache.get(roomCode) ?? [])
+  const [loading, setLoading] = useState(() => !cache.has(roomCode))
 
   useEffect(() => {
     if (!roomCode) return
@@ -26,6 +28,7 @@ export function usePoopEntries(roomCode: string) {
                 if (!merged.some((m) => m.id === e.id)) merged.push(e)
               })
               merged.sort((a, b) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime())
+              cache.set(roomCode, merged)
               return merged
             })
           }

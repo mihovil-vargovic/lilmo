@@ -139,14 +139,14 @@ export default function SpouseIdPage({ params }: PageProps) {
   }
 
   return (
-    <div className="pb-16">
+    <div className="pb-16 pb-safe">
       {/* Large title */}
-      <h1 className="text-[34px] font-bold tracking-tight px-4 md:px-8 pt-2 pb-1">Spouse ID</h1>
+      <h1 className="text-[34px] font-bold tracking-tight px-4 md:px-8 pt-1 pb-2">Spouse ID</h1>
 
       {/* Spouse ID code card */}
       <div className="pt-7 pb-0">
-        <p className="text-[13px] text-foreground/50 uppercase pl-4 md:pl-8 mb-1">Your Spouse ID</p>
-        <div className="flex items-center justify-between px-5 py-4 mx-4 md:mx-8 rounded-2xl bg-muted">
+        <p className="text-[13px] text-foreground/50 pl-4 md:pl-8 mb-1">Your Spouse ID</p>
+        <div className="flex items-center justify-between px-5 py-4 mx-4 md:mx-8 rounded-2xl border border-border">
           <span className="text-3xl font-mono font-semibold tracking-[0.35em]">{code}</span>
           <div className="flex items-center gap-1">
             <button
@@ -169,8 +169,8 @@ export default function SpouseIdPage({ params }: PageProps) {
 
       {/* Registered devices */}
       <div className="pt-7 pb-0">
-        <p className="text-[13px] text-foreground/50 uppercase pl-4 md:pl-8 mb-1">
-          Registered devices <span className="normal-case">{devices.length}/4</span>
+        <p className="text-[13px] text-foreground/50 pl-4 md:pl-8 mb-1">
+          Registered devices ({devices.length}/4)
         </p>
         {devices.length === 0 ? (
           <div className="px-5 py-4 mx-4 md:mx-8 rounded-2xl bg-muted">
@@ -200,7 +200,7 @@ export default function SpouseIdPage({ params }: PageProps) {
 
       {/* Actions list */}
       <div className="pt-7">
-        <div className="mx-4 md:mx-8 rounded-2xl bg-muted overflow-hidden">
+        <div className="mx-4 md:mx-8 rounded-2xl border border-border overflow-hidden">
           {/* Join your spouse */}
           <button
             onClick={() => { setJoinCode(''); setJoinError(''); setJoinOpen(true) }}

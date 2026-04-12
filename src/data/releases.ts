@@ -6,6 +6,10 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-12',
+    description: 'Spouse ID page polish: slide-in animation, outline cards, normal-case labels, and instant back navigation with no reload.',
+  },
+  {
+    date: '2026-04-12',
     description: 'Diaper tab Summary now shows the same Daily progress card as the Food tab — feedings, bottle/boobies breakdown, and poop count all in one place.',
   },
   {
