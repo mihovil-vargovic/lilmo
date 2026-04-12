@@ -195,8 +195,7 @@ export default function SpouseIdPage({ params }: PageProps) {
       </div>
 
       {/* Actions list */}
-      <div className="px-4 md:px-8 pt-6">
-        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Actions</p>
+      <div className="px-4 md:px-8 pt-4">
         <div className="rounded-2xl bg-muted overflow-hidden">
           {/* Join your spouse */}
           <button
