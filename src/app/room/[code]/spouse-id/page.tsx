@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import BottomSheet from '@/components/shared/BottomSheet'
 import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetPortal, SheetOverlay } from '@/components/ui/sheet'
 import { ChevronRight } from 'lucide-react'
 import { roomExists, getOrCreateDeviceId, canDeviceJoin, registerDevice, resetRoomDevices, parseDeviceLabel, isAppleDevice, isLocalhost } from '@/lib/roomCode'
 import { supabase } from '@/lib/supabase'
@@ -252,34 +253,45 @@ export default function SpouseIdPage({ params }: PageProps) {
         </div>
       </BottomSheet>
 
-      {/* Reset Bottom Sheet */}
-      <BottomSheet open={resetOpen} onClose={() => setResetOpen(false)} title="Reset Spouse ID access">
-        <div className="space-y-5">
-          {resetDone ? (
-            <>
-              <p className="text-sm text-muted-foreground">Access has been reset. All devices will need to re-join.</p>
-              <Button className="w-full h-11" onClick={() => setResetOpen(false)}>Done</Button>
-            </>
-          ) : (
-            <>
-              <p className="text-sm text-muted-foreground">
-                This removes all registered devices. If your partner got a new phone and can't join, reset access to allow re-registration.
-              </p>
-              <Button
-                variant="destructive"
-                className="w-full h-11"
-                onClick={handleReset}
-                disabled={resetting}
-              >
-                {resetting ? 'Resetting…' : 'Reset access'}
-              </Button>
-              <Button variant="outline" className="w-full h-11" onClick={() => setResetOpen(false)}>
-                Cancel
-              </Button>
-            </>
-          )}
-        </div>
-      </BottomSheet>
+      {/* Reset Sheet */}
+      <Sheet open={resetOpen} onOpenChange={(o) => { if (!o) setResetOpen(false) }}>
+        <SheetPortal>
+          <SheetOverlay />
+          <SheetContent
+            side="bottom"
+            className="px-4 pt-6 pb-4 [&>button]:hidden md:inset-0 md:m-auto md:w-[520px] md:h-fit md:rounded-2xl md:data-[state=open]:slide-in-from-bottom-[50px] md:data-[state=closed]:slide-out-to-bottom-[50px]"
+          >
+            {resetDone ? (
+              <>
+                <div className="flex flex-col gap-1 mb-5">
+                  <h2 className="text-base font-semibold">Access reset</h2>
+                  <p className="text-sm text-muted-foreground">All devices removed. Everyone will need to re-join.</p>
+                </div>
+                <Button className="w-full h-11" onClick={() => setResetOpen(false)}>Done</Button>
+              </>
+            ) : (
+              <>
+                <div className="flex flex-col gap-1 mb-5">
+                  <h2 className="text-base font-semibold">Reset Spouse ID access</h2>
+                  <p className="text-sm text-muted-foreground">This removes all registered devices. If your partner got a new phone and can't join, reset access to allow re-registration.</p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={handleReset}
+                    disabled={resetting}
+                    className="w-full h-11 rounded-xl bg-red-500 text-white text-sm font-semibold transition-colors hover:bg-red-600 disabled:opacity-50"
+                  >
+                    {resetting ? 'Resetting…' : 'Reset access'}
+                  </button>
+                  <Button variant="outline" className="w-full h-11" onClick={() => setResetOpen(false)}>
+                    Cancel
+                  </Button>
+                </div>
+              </>
+            )}
+          </SheetContent>
+        </SheetPortal>
+      </Sheet>
     </div>
   )
 }
