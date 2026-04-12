@@ -6,6 +6,10 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-11',
+    description: 'Spouse ID is now a full page with a cleaner layout — your code, registered devices, join your spouse, and reset access all in one place.',
+  },
+  {
+    date: '2026-04-11',
     description: 'Summary now shows a Daily progress card with a narrative of today\'s feedings and diaper count. Yesterday moved to All history.',
   },
   {

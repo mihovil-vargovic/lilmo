@@ -38,6 +38,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
   const pathname = usePathname()
   const router = useRouter()
   const isReleases = pathname.endsWith('/releases')
+  const isSpouseId = pathname.endsWith('/spouse-id')
 
   // Auto-save room code when visiting the URL directly (e.g. shared link)
   // Also enforces 2-device limit — redirects if blocked
@@ -79,8 +80,8 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
           </div>
         </div>
         <div className="bg-background">
-          {isReleases ? (
-            <div className="h-12 flex items-center px-4 md:px-8 border-b border-border">
+          {isReleases || isSpouseId ? (
+            <div className="h-12 flex items-center px-4 md:px-8 border-b border-border relative">
               <button
                 onClick={() => router.back()}
                 className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -88,6 +89,9 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
                 <ChevronLeft className="w-4 h-4" />
                 Back
               </button>
+              {isSpouseId && (
+                <span className="absolute left-1/2 -translate-x-1/2 text-base font-semibold">Spouse ID</span>
+              )}
             </div>
           ) : (
             <div className="h-12 flex items-center justify-between px-4 md:px-8 border-b border-border">
@@ -100,7 +104,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
                   Releases
                 </Link>
                 <button
-                  onClick={() => setSwitchOpen(true)}
+                  onClick={() => router.push(`/room/${code}/spouse-id`)}
                   className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Spouse ID
@@ -111,8 +115,8 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
         </div>
       </div>
 
-      {/* Tab bar scrolls with content — hidden on releases */}
-      {!isReleases && <TabBar code={code} />}
+      {/* Tab bar scrolls with content — hidden on releases and spouse-id */}
+      {!isReleases && !isSpouseId && <TabBar code={code} />}
 
       {/* Content */}
       <div className="flex-1 relative">
