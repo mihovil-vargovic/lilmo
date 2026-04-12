@@ -36,6 +36,7 @@ function JoinPageContent() {
     setBypassInput(value)
     const hash = await hashString(value.trim())
     if (hash === process.env.NEXT_PUBLIC_BYPASS_HASH) {
+      sessionStorage.setItem('lilmo_bypass', '1')
       setBypassed(true)
       setTitleTaps(0)
       setBypassInput('')

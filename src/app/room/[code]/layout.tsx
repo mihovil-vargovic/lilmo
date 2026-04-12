@@ -43,7 +43,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
   // Also enforces 2-device limit — redirects if blocked
   useEffect(() => {
     async function checkAndSave() {
-      if (isLocalhost()) {
+      if (isLocalhost() || sessionStorage.getItem('lilmo_bypass') === '1') {
         localStorage.setItem('lilmo_room', code)
         return
       }
