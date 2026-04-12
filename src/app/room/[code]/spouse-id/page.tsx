@@ -239,17 +239,19 @@ export default function SpouseIdPage({ params }: PageProps) {
             {joinError && (
               <p className="text-sm text-destructive">{joinError}</p>
             )}
-            <Button
-              type="submit"
-              disabled={joining || joinCode.length !== 6}
-              className="w-full h-11"
-            >
-              {joining ? 'Joining…' : 'Join'}
-            </Button>
+            <div className="flex gap-3">
+              <Button variant="outline" className="flex-1 h-11" onClick={() => setJoinOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={joining || joinCode.length !== 6}
+                className="flex-1 h-11"
+              >
+                {joining ? 'Joining…' : 'Join'}
+              </Button>
+            </div>
           </form>
-          <Button variant="outline" className="w-full h-11" onClick={() => setJoinOpen(false)}>
-            Cancel
-          </Button>
         </div>
       </BottomSheet>
 
