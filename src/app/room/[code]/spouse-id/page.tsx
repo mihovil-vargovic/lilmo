@@ -141,8 +141,8 @@ export default function SpouseIdPage({ params }: PageProps) {
   return (
     <div className="pb-16">
       {/* Spouse ID code card */}
-      <div className="pt-6 pb-2">
-        <p className="text-xs text-muted-foreground uppercase tracking-wide px-8 md:px-12 mb-1.5">Your Spouse ID</p>
+      <div className="pt-7 pb-0">
+        <p className="text-[13px] text-muted-foreground uppercase pl-9 md:pl-13 mb-1">Your Spouse ID</p>
         <div className="flex items-center justify-between px-5 py-4 mx-4 md:mx-8 rounded-2xl bg-muted">
           <span className="text-3xl font-mono font-semibold tracking-[0.35em]">{code}</span>
           <div className="flex items-center gap-1">
@@ -165,8 +165,8 @@ export default function SpouseIdPage({ params }: PageProps) {
       </div>
 
       {/* Registered devices */}
-      <div className="pt-6 pb-2">
-        <p className="text-xs text-muted-foreground uppercase tracking-wide px-8 md:px-12 mb-1.5">
+      <div className="pt-7 pb-0">
+        <p className="text-[13px] text-muted-foreground uppercase pl-9 md:pl-13 mb-1">
           Registered devices <span className="normal-case">{devices.length}/4</span>
         </p>
         {devices.length === 0 ? (
@@ -196,7 +196,7 @@ export default function SpouseIdPage({ params }: PageProps) {
       </div>
 
       {/* Actions list */}
-      <div className="pt-6">
+      <div className="pt-7">
         <div className="mx-4 md:mx-8 rounded-2xl bg-muted overflow-hidden">
           {/* Join your spouse */}
           <button
