@@ -142,7 +142,7 @@ export default function SpouseIdPage({ params }: PageProps) {
     <div className="pb-16">
       {/* Spouse ID code card */}
       <div className="pt-7 pb-0">
-        <p className="text-[13px] text-muted-foreground uppercase pl-4 md:pl-8 mb-1">Your Spouse ID</p>
+        <p className="text-[13px] text-foreground/50 uppercase pl-4 md:pl-8 mb-1">Your Spouse ID</p>
         <div className="flex items-center justify-between px-5 py-4 mx-4 md:mx-8 rounded-2xl bg-muted">
           <span className="text-3xl font-mono font-semibold tracking-[0.35em]">{code}</span>
           <div className="flex items-center gap-1">
@@ -166,7 +166,7 @@ export default function SpouseIdPage({ params }: PageProps) {
 
       {/* Registered devices */}
       <div className="pt-7 pb-0">
-        <p className="text-[13px] text-muted-foreground uppercase pl-4 md:pl-8 mb-1">
+        <p className="text-[13px] text-foreground/50 uppercase pl-4 md:pl-8 mb-1">
           Registered devices <span className="normal-case">{devices.length}/4</span>
         </p>
         {devices.length === 0 ? (
