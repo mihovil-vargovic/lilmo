@@ -37,7 +37,9 @@ export default function FeedConfirmPopover({
 
   useEffect(() => {
     if (open) {
-      setTime(editEntry ? new Date(editEntry.logged_at) : roundToNearest5(new Date()))
+      const initialTime = editEntry ? new Date(editEntry.logged_at) : roundToNearest5(new Date())
+      if (initialTime > new Date()) initialTime.setDate(initialTime.getDate() - 1)
+      setTime(initialTime)
       setFeedType(editEntry?.feed_type ?? 'boobies')
       setDurationMinutes(editEntry?.duration_minutes ?? 15)
       setAmountMl(editEntry?.amount_ml ?? 20)
