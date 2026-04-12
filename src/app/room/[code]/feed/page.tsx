@@ -63,7 +63,7 @@ export default function FeedPage({ params }: FeedPageProps) {
           aria-label="Summary"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/baby-icon.png" alt="Summary" width={20} height={20} />
+          <img src="/baby-icon.png" alt="Summary" width={20} height={20} style={{ marginTop: '-1px' }} />
         </button>
       </div>
 

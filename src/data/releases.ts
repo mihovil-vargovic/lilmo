@@ -6,6 +6,10 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-12',
+    description: 'Bottom sheets now open and close with a smoother iOS-style spring animation. Summary button icon nudged 1px up on both tabs. Food and poop icons in Daily progress card adjusted 1px up.',
+  },
+  {
+    date: '2026-04-12',
     description: 'Duration picker now goes up to 45 minutes (added 35, 40, 45 options). "Today" heading removed from Food and Diaper tabs.',
   },
   {
