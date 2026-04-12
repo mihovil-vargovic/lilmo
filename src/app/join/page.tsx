@@ -25,7 +25,10 @@ function JoinPageContent() {
   const [titleTaps, setTitleTaps] = useState(0)
   const [bypassInput, setBypassInput] = useState('')
   const [bypassed, setBypassed] = useState(() =>
-    typeof window !== 'undefined' && sessionStorage.getItem('lilmo_bypass') === '1'
+    typeof window !== 'undefined' && (
+      sessionStorage.getItem('lilmo_bypass') === '1' ||
+      document.cookie.includes('lilmo_bypass=1')
+    )
   )
 
   const isBlocked = searchParams.get('blocked') === '1'
@@ -38,6 +41,7 @@ function JoinPageContent() {
     setBypassInput(value)
     const hash = await hashString(value.trim())
     if (hash === process.env.NEXT_PUBLIC_BYPASS_HASH) {
+      document.cookie = 'lilmo_bypass=1; path=/; max-age=86400'
       sessionStorage.setItem('lilmo_bypass', '1')
       setBypassed(true)
       setTitleTaps(0)
@@ -51,7 +55,7 @@ function JoinPageContent() {
   }
 
   const handleCreate = async () => {
-    const isBypassed = sessionStorage.getItem('lilmo_bypass') === '1'
+    const isBypassed = sessionStorage.getItem('lilmo_bypass') === '1' || document.cookie.includes('lilmo_bypass=1')
     if (!isBypassed && !isLocalhost() && !isAppleDevice(navigator.userAgent)) {
       return
     }
@@ -78,7 +82,7 @@ function JoinPageContent() {
       setJoinError('Please enter a valid 6-digit code.')
       return
     }
-    const isBypassed = sessionStorage.getItem('lilmo_bypass') === '1'
+    const isBypassed = sessionStorage.getItem('lilmo_bypass') === '1' || document.cookie.includes('lilmo_bypass=1')
     if (!isBypassed && !isLocalhost() && !isAppleDevice(navigator.userAgent)) {
       setJoinError('Lilmo is only available on Apple devices.')
       return
