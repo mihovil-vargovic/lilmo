@@ -81,7 +81,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
         </div>
         <div className="bg-background">
           {isReleases || isSpouseId ? (
-            <div className="h-12 flex items-center px-4 md:px-8 border-b border-border relative">
+            <div className="h-12 flex items-center px-4 md:px-8 border-b border-border">
               <button
                 onClick={() => router.back()}
                 className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -89,9 +89,6 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
                 <ChevronLeft className="w-4 h-4" />
                 Back
               </button>
-              {isSpouseId && (
-                <span className="absolute left-1/2 -translate-x-1/2 text-base font-semibold">Spouse ID</span>
-              )}
             </div>
           ) : (
             <div className="h-12 flex items-center justify-between px-4 md:px-8 border-b border-border">
