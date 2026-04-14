@@ -21,7 +21,7 @@ export default function PoopList({
   showPopover,
   onClosePopover,
 }: PoopListProps) {
-  const { entries, loading, addEntry, updateEntry, deleteEntry } =
+  const { entries, loading, addEntry, updateEntry, deleteEntry, latestAddedId } =
     usePoopEntries(roomCode)
   const [editEntry, setEditEntry] = useState<PoopEntry | null>(null)
   const [showEditPopover, setShowEditPopover] = useState(false)
@@ -66,7 +66,7 @@ export default function PoopList({
       {entries.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
           <p className="text-sm text-muted-foreground">
-            No entries yet. Tap Add Diaper to get started.
+            No entries yet. Tap + Diaper to get started.
           </p>
         </div>
       ) : (
@@ -74,7 +74,10 @@ export default function PoopList({
           {groups.map((group) => (
             <DayGroup key={group.date} label={group.label}>
               {group.entries.map((entry, entryIndex) => (
-                <div key={entry.id}>
+                <div
+                  key={entry.id}
+                  className={entry.id === latestAddedId ? 'animate-entry-fade-in' : undefined}
+                >
                   <PoopEntryRow
                     entry={entry}
                     onEdit={handleEdit}

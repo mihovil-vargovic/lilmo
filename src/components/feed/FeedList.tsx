@@ -18,6 +18,7 @@ interface FeedListProps {
   deleteEntry: (id: string) => Promise<void>
   showPopover: boolean
   onClosePopover: () => void
+  latestAddedId?: string | null
 }
 
 export default function FeedList({
@@ -28,6 +29,7 @@ export default function FeedList({
   deleteEntry,
   showPopover,
   onClosePopover,
+  latestAddedId,
 }: FeedListProps) {
   const [editEntry, setEditEntry] = useState<FeedEntry | null>(null)
   const [showEditPopover, setShowEditPopover] = useState(false)
@@ -70,7 +72,7 @@ export default function FeedList({
       {entries.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
           <p className="text-sm text-muted-foreground">
-            No entries yet. Tap Add Food to get started.
+            No entries yet. Tap + Food to get started.
           </p>
         </div>
       ) : (
@@ -81,7 +83,10 @@ export default function FeedList({
                 <NextFeedRow loggedAt={lastPastEntry.logged_at} />
               )}
               {group.entries.map((entry, entryIndex) => (
-                <div key={entry.id}>
+                <div
+                  key={entry.id}
+                  className={entry.id === latestAddedId ? 'animate-entry-fade-in' : undefined}
+                >
                   <FeedEntryRow
                     entry={entry}
                     onEdit={handleEdit}

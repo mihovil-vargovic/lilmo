@@ -40,7 +40,7 @@ export default function PoopPage({ params }: PoopPageProps) {
           onClick={() => setShowPopover(true)}
           className="h-12 w-36 rounded-full bg-primary text-primary-foreground text-sm font-medium shadow-[0_4px_20px_rgba(0,0,0,0.25)]"
         >
-          Log diaper
+          + Diaper
         </button>
       </div>
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { supabase } from '@/lib/supabase'
 import { PoopEntry, PoopType } from '@/types'
@@ -10,6 +10,8 @@ const cache = new Map<string, PoopEntry[]>()
 export function usePoopEntries(roomCode: string) {
   const [entries, setEntries] = useState<PoopEntry[]>(() => cache.get(roomCode) ?? [])
   const [loading, setLoading] = useState(() => !cache.has(roomCode))
+  const [latestAddedId, setLatestAddedId] = useState<string | null>(null)
+  const latestAddedTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     if (!roomCode) return
@@ -97,6 +99,11 @@ export function usePoopEntries(roomCode: string) {
   const addEntry = async (loggedAt: Date, type: PoopType) => {
     const now = new Date()
     const id = uuidv4()
+
+    if (latestAddedTimer.current) clearTimeout(latestAddedTimer.current)
+    setLatestAddedId(id)
+    latestAddedTimer.current = setTimeout(() => setLatestAddedId(null), 600)
+
     const newEntry: PoopEntry = {
       id,
       room_code: roomCode,
@@ -155,5 +162,5 @@ export function usePoopEntries(roomCode: string) {
     }
   }
 
-  return { entries, loading, addEntry, updateEntry, deleteEntry }
+  return { entries, loading, addEntry, updateEntry, deleteEntry, latestAddedId }
 }

@@ -17,7 +17,7 @@ export default function FeedPage({ params }: FeedPageProps) {
   const { code } = params
   const [showPopover, setShowPopover] = useState(false)
   const [showSummary, setShowSummary] = useState(false)
-  const { entries, loading, addEntry, updateEntry, deleteEntry } = useFeedEntries(code)
+  const { entries, loading, addEntry, updateEntry, deleteEntry, latestAddedId } = useFeedEntries(code)
   const { entries: poopEntries } = usePoopEntries(code)
   const { primary, secondary } = useScrollHide()
 
@@ -31,6 +31,7 @@ export default function FeedPage({ params }: FeedPageProps) {
         deleteEntry={deleteEntry}
         showPopover={showPopover}
         onClosePopover={() => setShowPopover(false)}
+        latestAddedId={latestAddedId}
       />
 
       {/* Add food button — centered */}
@@ -45,7 +46,7 @@ export default function FeedPage({ params }: FeedPageProps) {
           onClick={() => setShowPopover(true)}
           className="h-12 w-36 rounded-full bg-primary text-primary-foreground text-sm font-medium shadow-[0_4px_20px_rgba(0,0,0,0.25)]"
         >
-          Log food
+          + Food
         </button>
       </div>
 

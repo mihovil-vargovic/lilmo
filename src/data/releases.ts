@@ -5,6 +5,10 @@ export interface Release {
 
 const releases: Release[] = [
   {
+    date: '2026-04-14',
+    description: 'Add buttons renamed to "+ Food" and "+ Diaper". New entries now fade in smoothly when added — a gentle slide-down with ease-out on both tabs.',
+  },
+  {
     date: '2026-04-12',
     description: 'Bottom sheets now open and close with a proper iOS spring animation — snappy close, soft spring open.',
   },
