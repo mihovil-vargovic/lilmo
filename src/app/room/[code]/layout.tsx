@@ -50,6 +50,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
   const [contentVisible, setContentVisible] = useState(false)
   const [minTimeReached, setMinTimeReached] = useState(false)
   const dataReady = !feedLoading && !poopLoading
+  const fadeStarted = useRef(false)
 
   useEffect(() => {
     const t = setTimeout(() => setMinTimeReached(true), 800)
@@ -57,13 +58,14 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
   }, [])
 
   useEffect(() => {
-    if (dataReady && minTimeReached && !splashFading && !splashDone) {
+    if (dataReady && minTimeReached && !fadeStarted.current) {
+      fadeStarted.current = true
       setSplashFading(true)
       setContentVisible(true)
       const t = setTimeout(() => setSplashDone(true), 500)
       return () => clearTimeout(t)
     }
-  }, [dataReady, minTimeReached, splashFading, splashDone])
+  }, [dataReady, minTimeReached])
 
   const handleBack = () => {
     if (contentRef.current) {
