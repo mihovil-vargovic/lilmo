@@ -6,7 +6,7 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-15',
-    description: 'Fixed splash screen blocking buttons after fade-out. Added a splash screen that hides the loading phase — the app icon fades out smoothly once everything is ready.',
+    description: 'Fixed splash screen, aligned entry row heights, narrowed CTA buttons, disabled service worker on localhost to prevent stale cache issues.',
   },
   {
     date: '2026-04-14',

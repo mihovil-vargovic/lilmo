@@ -17,13 +17,16 @@ The working directory for git commands is:
 
 ## Localhost
 
-When the user mentions "localhost", open http://localhost:3010 in Google Chrome:
+When the user mentions "localhost":
 
+1. Start the dev server in the background (it's safe to run even if already running):
+```
+cd "/Users/mihovilhome/Library/CloudStorage/GoogleDrive-mihovilvargovic@gmail.com/My Drive/Claude/lilmo/app" && npm run dev 2>&1 &
+```
+2. Wait 1 second, then open in Google Chrome:
 ```
 open -a "Google Chrome" http://localhost:3010
 ```
-
-Also start the dev server in the background if it isn't already running.
 
 ## Before saying it's done
 

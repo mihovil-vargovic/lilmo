@@ -52,7 +52,7 @@ export default function NextFeedRow({ loggedAt }: NextFeedRowProps) {
 
   return (
     <>
-      <div className="flex items-center justify-between px-4 md:px-8 py-3 bg-background">
+      <div className="flex items-center justify-between px-4 md:px-8 py-3.5 bg-background">
         <div className={`flex items-center gap-2.5 ${color}`}>
           <span className="text-sm font-semibold tabular-nums">
             {estimatedTime}
