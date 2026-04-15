@@ -6,6 +6,10 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-15',
+    description: 'Toast notification now spans full width with correct side margins, matching the page layout.',
+  },
+  {
+    date: '2026-04-15',
     description: 'Fixed splash screen, aligned entry row heights, narrowed CTA buttons, disabled service worker on localhost to prevent stale cache issues.',
   },
   {

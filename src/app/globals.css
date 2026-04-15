@@ -82,7 +82,7 @@
   to   { width: 100%; }
 }
 
-[data-sonner-toaster][data-position="top-center"] {
+[data-sonner-toaster][data-x-position="center"] {
   left: 1rem !important;
   right: 1rem !important;
   width: auto !important;
