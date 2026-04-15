@@ -222,7 +222,7 @@ export default function SpouseIdPage({ params }: PageProps) {
       </div>
 
       {/* Join Bottom Sheet */}
-      <BottomSheet open={joinOpen} onClose={() => setJoinOpen(false)} title="Join your spouse">
+      <BottomSheet open={joinOpen} onClose={() => setJoinOpen(false)} title="Join your spouse" liftWithKeyboard>
         <div className="space-y-5">
           <p className="text-sm text-muted-foreground">Enter the 6-digit Spouse ID from your partner.</p>
           <form onSubmit={handleJoin} className="space-y-3">

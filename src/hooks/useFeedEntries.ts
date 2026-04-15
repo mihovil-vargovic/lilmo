@@ -102,8 +102,10 @@ export function useFeedEntries(roomCode: string) {
     const id = uuidv4()
 
     if (latestAddedTimer.current) clearTimeout(latestAddedTimer.current)
-    setLatestAddedId(id)
-    latestAddedTimer.current = setTimeout(() => setLatestAddedId(null), 600)
+    latestAddedTimer.current = setTimeout(() => {
+      setLatestAddedId(id)
+      setTimeout(() => setLatestAddedId(null), 600)
+    }, 380)
 
     const newEntry: FeedEntry = {
       id,

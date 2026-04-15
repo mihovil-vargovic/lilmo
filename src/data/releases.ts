@@ -6,6 +6,10 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-15',
+    description: 'New entry fade-in animation now plays after the bottom sheet is fully dismissed, not beneath it. "Join your spouse" sheet now rises above the keyboard on iOS.',
+  },
+  {
+    date: '2026-04-15',
     description: 'Toast notification now spans full width with correct side margins, matching the page layout.',
   },
   {
