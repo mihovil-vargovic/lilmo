@@ -54,9 +54,14 @@ const config: Config = {
           "0%": { opacity: "0", transform: "translateY(-6px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        "splash-icon": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
       },
       animation: {
         "entry-fade-in": "entry-fade-in 350ms ease-out forwards",
+        "splash-icon": "splash-icon 600ms ease-in-out forwards",
       },
     },
   },

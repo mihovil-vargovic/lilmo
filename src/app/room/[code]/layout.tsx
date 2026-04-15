@@ -9,6 +9,8 @@ import SwitchRoomModal from '@/components/shared/SwitchRoomModal'
 import { Toaster } from 'sonner'
 import { cn } from '@/lib/utils'
 import { getOrCreateDeviceId, canDeviceJoin, registerDevice, isAppleDevice, isLocalhost } from '@/lib/roomCode'
+import { useFeedEntries } from '@/hooks/useFeedEntries'
+import { usePoopEntries } from '@/hooks/usePoopEntries'
 
 function useOnlineStatus() {
   const [isOnline, setIsOnline] = useState(true)
@@ -40,6 +42,28 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
   const isReleases = pathname.endsWith('/releases')
   const isSpouseId = pathname.endsWith('/spouse-id')
   const contentRef = useRef<HTMLDivElement>(null)
+
+  const { loading: feedLoading } = useFeedEntries(code)
+  const { loading: poopLoading } = usePoopEntries(code)
+  const [splashDone, setSplashDone] = useState(false)
+  const [splashFading, setSplashFading] = useState(false)
+  const [contentVisible, setContentVisible] = useState(false)
+  const [minTimeReached, setMinTimeReached] = useState(false)
+  const dataReady = !feedLoading && !poopLoading
+
+  useEffect(() => {
+    const t = setTimeout(() => setMinTimeReached(true), 800)
+    return () => clearTimeout(t)
+  }, [])
+
+  useEffect(() => {
+    if (dataReady && minTimeReached && !splashFading && !splashDone) {
+      setSplashFading(true)
+      setContentVisible(true)
+      const t = setTimeout(() => setSplashDone(true), 500)
+      return () => clearTimeout(t)
+    }
+  }, [dataReady, minTimeReached, splashFading, splashDone])
 
   const handleBack = () => {
     if (contentRef.current) {
@@ -74,7 +98,12 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
   }, [code, router])
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div
+      className={cn(
+        'min-h-screen bg-background flex flex-col transition-opacity duration-500 ease-in-out',
+        contentVisible ? 'opacity-100' : 'opacity-0'
+      )}
+    >
       {/* Offline banner + header — sticky */}
       <div className="sticky top-0 z-20">
         <div
@@ -156,6 +185,24 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
         currentCode={code}
       />
       <Toaster position="top-center" toastOptions={{ style: { background: '#000', color: '#fff' } }} />
+
+      {!splashDone && (
+        <div
+          className={cn(
+            'fixed inset-0 z-50 bg-background flex items-center justify-center transition-opacity duration-500 ease-in-out',
+            splashFading ? 'opacity-0' : 'opacity-100'
+          )}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/icons/icon-512x512.png"
+            alt="Lilmo"
+            width={100}
+            height={100}
+            className="rounded-full animate-splash-icon"
+          />
+        </div>
+      )}
     </div>
   )
 }
