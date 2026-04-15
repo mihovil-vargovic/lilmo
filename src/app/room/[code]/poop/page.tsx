@@ -38,7 +38,7 @@ export default function PoopPage({ params }: PoopPageProps) {
       >
         <button
           onClick={() => setShowPopover(true)}
-          className="h-12 w-32 rounded-full bg-primary text-primary-foreground text-sm font-medium shadow-[0_4px_20px_rgba(0,0,0,0.25)]"
+          className="h-12 w-[104px] rounded-full bg-primary text-primary-foreground text-sm font-medium shadow-[0_4px_20px_rgba(0,0,0,0.25)]"
         >
           + Diaper
         </button>
