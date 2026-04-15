@@ -100,6 +100,7 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
   }, [code, router])
 
   return (
+    <>
     <div
       className={cn(
         'min-h-screen bg-background flex flex-col transition-opacity duration-500 ease-in-out',
@@ -187,24 +188,25 @@ export default function RoomLayout({ children, params }: RoomLayoutProps) {
         currentCode={code}
       />
       <Toaster position="top-center" toastOptions={{ style: { background: '#000', color: '#fff' } }} />
-
-      {!splashDone && (
-        <div
-          className={cn(
-            'fixed inset-0 z-50 bg-background flex items-center justify-center transition-opacity duration-500 ease-in-out',
-            splashFading ? 'opacity-0' : 'opacity-100'
-          )}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/icons/icon-512x512.png"
-            alt="Lilmo"
-            width={100}
-            height={100}
-            className="rounded-full animate-splash-icon"
-          />
-        </div>
-      )}
     </div>
+
+    {!splashDone && (
+      <div
+        className={cn(
+          'fixed inset-0 z-50 bg-background flex items-center justify-center transition-opacity duration-500 ease-in-out',
+          splashFading ? 'opacity-0' : 'opacity-100'
+        )}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/icons/icon-512x512.png"
+          alt="Lilmo"
+          width={100}
+          height={100}
+          className="rounded-full animate-splash-icon"
+        />
+      </div>
+    )}
+    </>
   )
 }
