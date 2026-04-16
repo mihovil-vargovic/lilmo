@@ -8,6 +8,7 @@ import FeedEntryRow from './FeedEntryRow'
 import NextFeedRow from './NextFeedRow'
 import FeedConfirmPopover from './FeedConfirmPopover'
 import DeleteConfirmSheet from '@/components/shared/DeleteConfirmSheet'
+import HourlyTimeline from '@/components/shared/HourlyTimeline'
 import { FeedEntry } from '@/types'
 
 interface FeedListProps {
@@ -77,6 +78,7 @@ export default function FeedList({
         </div>
       ) : (
         <div className="pb-28">
+          <HourlyTimeline timestamps={entries.map(e => e.logged_at)} />
           {groups.map((group, groupIndex) => (
             <DayGroup key={group.date} label={group.label}>
               {groupIndex === 0 && lastPastEntry && (

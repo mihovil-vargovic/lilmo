@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { useRoomData } from '@/lib/RoomDataContext'
 import { groupByDay } from '@/lib/timeUtils'
 import DayGroup from '@/components/shared/DayGroup'
+import HourlyTimeline from '@/components/shared/HourlyTimeline'
 import PoopEntryRow from './PoopEntryRow'
 import PoopConfirmPopover from './PoopConfirmPopover'
 import DeleteConfirmSheet from '@/components/shared/DeleteConfirmSheet'
@@ -68,6 +69,7 @@ export default function PoopList({
         </div>
       ) : (
         <div className="pb-28">
+          <HourlyTimeline timestamps={entries.map(e => e.logged_at)} />
           {groups.map((group) => (
             <DayGroup key={group.date} label={group.label}>
               {group.entries.map((entry, entryIndex) => (
