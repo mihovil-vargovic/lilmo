@@ -6,6 +6,10 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-16',
+    description: 'Spouse ID: registered devices section now has fixed height — no more layout shift while loading.',
+  },
+  {
+    date: '2026-04-16',
     description: 'Edit diaper now shows the type selector (Both/Poop/Pee) and saves the updated type.',
   },
   {

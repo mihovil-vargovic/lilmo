@@ -43,6 +43,7 @@ export default function SpouseIdPage({ params }: PageProps) {
   const router = useRouter()
   const [copied, setCopied] = useState(false)
   const [devices, setDevices] = useState<{ device_id: string; user_agent: string | null; joined_at: string }[]>([])
+  const [devicesLoading, setDevicesLoading] = useState(true)
 
   // Join sheet state
   const [joinOpen, setJoinOpen] = useState(false)
@@ -60,7 +61,7 @@ export default function SpouseIdPage({ params }: PageProps) {
       .from('room_devices')
       .select('device_id, user_agent, joined_at')
       .eq('room_code', code)
-      .then(({ data }) => setDevices(data || []))
+      .then(({ data }) => { setDevices(data || []); setDevicesLoading(false) })
   }, [code])
 
   const handleCopy = async () => {
@@ -167,35 +168,38 @@ export default function SpouseIdPage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Registered devices */}
+      {/* Registered devices — always 4 rows for fixed height */}
       <div className="pt-7 pb-0">
         <p className="text-[13px] text-foreground/50 pl-4 md:pl-8 mb-1">
-          Registered devices ({devices.length}/4)
+          Registered devices ({devicesLoading ? '…' : devices.length}/4)
         </p>
-        {devices.length === 0 ? (
-          <div className="px-5 py-4 mx-4 md:mx-8 rounded-2xl bg-muted">
-            <p className="text-sm text-muted-foreground">No registered devices.</p>
-          </div>
-        ) : (
-          <div className="mx-4 md:mx-8 rounded-2xl bg-muted overflow-hidden">
-            {devices.map((d, i) => {
-              const isThis = d.device_id === getOrCreateDeviceId()
-              const label = d.user_agent ? parseDeviceLabel(d.user_agent) : 'Unknown device'
-              const date = new Date(d.joined_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-              return (
-                <div key={d.device_id}>
-                  {i > 0 && <div className="h-px bg-border mx-5" />}
-                  <div className="flex items-center justify-between px-5 py-3.5">
-                    <div>
-                      <p className="text-sm font-medium">{label}{isThis && <span className="ml-2 text-xs text-muted-foreground font-normal">This device</span>}</p>
-                    </div>
-                    <span className="text-xs text-muted-foreground">{date}</span>
-                  </div>
+        <div className="mx-4 md:mx-8 rounded-2xl bg-muted overflow-hidden">
+          {Array.from({ length: 4 }).map((_, i) => {
+            const d = devices[i]
+            return (
+              <div key={i}>
+                {i > 0 && <div className="h-px bg-border mx-5" />}
+                <div className="flex items-center justify-between px-5 py-3.5 min-h-[52px]">
+                  {devicesLoading ? (
+                    <div className="h-3 w-32 bg-muted-foreground/20 rounded animate-pulse" />
+                  ) : d ? (
+                    <>
+                      <p className="text-sm font-medium">
+                        {d.user_agent ? parseDeviceLabel(d.user_agent) : 'Unknown device'}
+                        {d.device_id === getOrCreateDeviceId() && (
+                          <span className="ml-2 text-xs text-muted-foreground font-normal">This device</span>
+                        )}
+                      </p>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(d.joined_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </span>
+                    </>
+                  ) : null}
                 </div>
-              )
-            })}
-          </div>
-        )}
+              </div>
+            )
+          })}
+        </div>
       </div>
 
       {/* Actions list */}
