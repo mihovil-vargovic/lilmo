@@ -1,31 +1,56 @@
 'use client'
 
 interface HourlyTimelineProps {
-  timestamps: string[] // ISO date strings
+  timestamps: string[]
+}
+
+function hourLabel(hour: number): string {
+  return String(hour).padStart(2, '0')
 }
 
 export default function HourlyTimeline({ timestamps }: HourlyTimelineProps) {
-  const now = Date.now()
-  const msPerHour = 60 * 60 * 1000
+  const now = new Date()
+  const currentHour = now.getHours()
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
 
-  // Build a set of which hour-slots (0–23, where 23 = current hour) have entries
+  // Which hours today have at least one entry
   const filled = new Set<number>()
   for (const ts of timestamps) {
-    const diff = now - new Date(ts).getTime()
-    if (diff >= 0 && diff < 24 * msPerHour) {
-      const slot = 23 - Math.floor(diff / msPerHour)
-      filled.add(slot)
+    const d = new Date(ts)
+    if (d.getTime() >= todayStart) {
+      filled.add(d.getHours())
     }
   }
 
+  // Always 24 slots: hours 0–23
+  const slots = Array.from({ length: 24 }, (_, i) => i)
+
+  // Only label slots that have entries
+  const labelSlots = filled
+
   return (
-    <div className="flex gap-[3px] px-4 md:px-8 py-3">
-      {Array.from({ length: 24 }, (_, i) => (
-        <div
-          key={i}
-          className={`flex-1 h-[5px] rounded-[2px] ${filled.has(i) ? 'bg-foreground' : 'bg-border'}`}
-        />
-      ))}
+    <div className="px-4 md:px-8 pt-3 pb-1">
+      {/* Bars */}
+      <div className="flex items-end gap-[3px] h-10">
+        {slots.map((h) => (
+          <div
+            key={h}
+            className={`flex-1 h-full rounded-md ${
+              h > currentHour ? 'bg-border/40' : filled.has(h) ? 'bg-foreground' : 'bg-border'
+            }`}
+          />
+        ))}
+      </div>
+      {/* Hour labels */}
+      <div className="flex mt-1">
+        {slots.map((h) => (
+          <div key={h} className="flex-1 flex justify-center">
+            {labelSlots.has(h) && (
+              <span className="text-[9px] text-muted-foreground whitespace-nowrap">{hourLabel(h)}</span>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
