@@ -6,6 +6,10 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-16',
+    description: 'Edit diaper now shows the type selector (Both/Poop/Pee) and saves the updated type.',
+  },
+  {
+    date: '2026-04-16',
     description: 'Desktop: CTA and summary button now sit centered next to each other at the bottom.',
   },
   {

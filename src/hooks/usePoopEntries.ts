@@ -137,10 +137,10 @@ export function usePoopEntries(roomCode: string) {
     }
   }
 
-  const updateEntry = async (id: string, loggedAt: Date) => {
+  const updateEntry = async (id: string, loggedAt: Date, type?: PoopType) => {
     const { error } = await supabase
       .from('poop_entries')
-      .update({ logged_at: loggedAt.toISOString() })
+      .update({ logged_at: loggedAt.toISOString(), ...(type && { type }) })
       .eq('id', id)
     if (error) throw error
   }

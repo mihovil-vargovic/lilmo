@@ -8,7 +8,7 @@ import DayGroup from '@/components/shared/DayGroup'
 import PoopEntryRow from './PoopEntryRow'
 import PoopConfirmPopover from './PoopConfirmPopover'
 import DeleteConfirmSheet from '@/components/shared/DeleteConfirmSheet'
-import { PoopEntry } from '@/types'
+import { PoopEntry, PoopType } from '@/types'
 
 interface PoopListProps {
   showPopover: boolean
@@ -38,8 +38,8 @@ export default function PoopList({
     toast('Entry deleted', { style: { background: '#000', color: '#fff' } })
   }
 
-  const handleUpdate = async (id: string, loggedAt: Date) => {
-    await updateEntry(id, loggedAt)
+  const handleUpdate = async (id: string, loggedAt: Date, type?: PoopType) => {
+    await updateEntry(id, loggedAt, type)
     toast('Entry updated', { style: { background: '#000', color: '#fff' } })
   }
 

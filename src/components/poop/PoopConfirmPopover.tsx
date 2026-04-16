@@ -14,7 +14,7 @@ interface PoopConfirmPopoverProps {
   onClose: () => void
   onConfirm: (loggedAt: Date, type: PoopType) => Promise<void>
   editEntry?: PoopEntry | null
-  onUpdate?: (id: string, loggedAt: Date) => Promise<void>
+  onUpdate?: (id: string, loggedAt: Date, type: PoopType) => Promise<void>
 }
 
 const POOP_TYPE_OPTIONS: { value: PoopType; label: string }[] = [
@@ -60,7 +60,7 @@ export default function PoopConfirmPopover({
     setSaving(true)
     try {
       if (editEntry && onUpdate) {
-        await onUpdate(editEntry.id, time)
+        await onUpdate(editEntry.id, time, selectedType)
       } else {
         localStorage.setItem(STORAGE_KEY, selectedType)
         await onConfirm(time, selectedType)
@@ -81,25 +81,23 @@ export default function PoopConfirmPopover({
       title={editEntry ? 'Edit diaper' : 'Add diaper'}
     >
       <div className="space-y-7">
-        {/* Type selection — only when adding */}
-        {!editEntry && (
-          <Tabs
-            value={selectedType}
-            onValueChange={(v) => setSelectedType(v as PoopType)}
-          >
-            <TabsList className="w-full">
-              {POOP_TYPE_OPTIONS.map((opt) => (
-                <TabsTrigger
-                  key={opt.value}
-                  value={opt.value}
-                  className="flex-1 text-sm"
-                >
-                  <span>{opt.label}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        )}
+        {/* Type selection */}
+        <Tabs
+          value={selectedType}
+          onValueChange={(v) => setSelectedType(v as PoopType)}
+        >
+          <TabsList className="w-full">
+            {POOP_TYPE_OPTIONS.map((opt) => (
+              <TabsTrigger
+                key={opt.value}
+                value={opt.value}
+                className="flex-1 text-sm"
+              >
+                <span>{opt.label}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
 
         {/* Time picker */}
         <div className="flex items-center justify-center py-2">
