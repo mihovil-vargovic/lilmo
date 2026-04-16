@@ -6,6 +6,10 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-16',
+    description: 'Desktop: CTA and summary button now sit centered next to each other at the bottom.',
+  },
+  {
+    date: '2026-04-16',
     description: 'Splash icon moved up; join sheet no longer lags when keyboard appears.',
   },
   {
