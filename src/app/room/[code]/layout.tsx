@@ -160,7 +160,7 @@ function RoomLayoutInner({ code, children }: { code: string; children: React.Rea
             className="fixed inset-0 bg-background z-30 flex flex-col"
             style={{ animation: 'slideInFromRight 0.35s cubic-bezier(0.32,0.72,0,1)' }}
           >
-            <div className="shrink-0 h-12 flex items-center px-4 border-b border-border bg-background">
+            <div className="shrink-0 h-12 flex items-center px-4 bg-background">
               <button
                 onClick={handleBack}
                 className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"

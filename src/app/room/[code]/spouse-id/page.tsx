@@ -142,7 +142,7 @@ export default function SpouseIdPage({ params }: PageProps) {
   return (
     <div className="pb-16 pb-safe">
       {/* Large title */}
-      <h1 className="text-[34px] font-bold tracking-tight px-4 md:px-8 pt-1 pb-2">Spouse ID</h1>
+      <h1 className="text-[34px] font-bold tracking-tight px-4 md:px-8 pt-1 pb-2 border-b border-border">Spouse ID</h1>
 
       {/* Spouse ID code card */}
       <div className="pt-7 pb-0">
