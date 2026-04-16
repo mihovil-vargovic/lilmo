@@ -3,9 +3,7 @@
 import { useState } from 'react'
 import FeedList from '@/components/feed/FeedList'
 import FeedSummaryModal from '@/components/feed/FeedSummaryModal'
-import StickyAddButton from '@/components/layout/StickyAddButton'
-import { useFeedEntries } from '@/hooks/useFeedEntries'
-import { usePoopEntries } from '@/hooks/usePoopEntries'
+import { useRoomData } from '@/lib/RoomDataContext'
 import { useScrollHide } from '@/hooks/useScrollHide'
 import { cn } from '@/lib/utils'
 
@@ -13,12 +11,10 @@ interface FeedPageProps {
   params: { code: string }
 }
 
-export default function FeedPage({ params }: FeedPageProps) {
-  const { code } = params
+export default function FeedPage({ params: _ }: FeedPageProps) {
   const [showPopover, setShowPopover] = useState(false)
   const [showSummary, setShowSummary] = useState(false)
-  const { entries, loading, addEntry, updateEntry, deleteEntry, latestAddedId } = useFeedEntries(code)
-  const { entries: poopEntries } = usePoopEntries(code)
+  const { feed: { entries, loading, addEntry, updateEntry, deleteEntry, latestAddedId }, poop: { entries: poopEntries } } = useRoomData()
   const { primary, secondary } = useScrollHide()
 
   return (

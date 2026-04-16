@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { usePoopEntries } from '@/hooks/usePoopEntries'
+import { useRoomData } from '@/lib/RoomDataContext'
 import { groupByDay } from '@/lib/timeUtils'
 import DayGroup from '@/components/shared/DayGroup'
 import PoopEntryRow from './PoopEntryRow'
@@ -11,18 +11,15 @@ import DeleteConfirmSheet from '@/components/shared/DeleteConfirmSheet'
 import { PoopEntry } from '@/types'
 
 interface PoopListProps {
-  roomCode: string
   showPopover: boolean
   onClosePopover: () => void
 }
 
 export default function PoopList({
-  roomCode,
   showPopover,
   onClosePopover,
 }: PoopListProps) {
-  const { entries, loading, addEntry, updateEntry, deleteEntry, latestAddedId } =
-    usePoopEntries(roomCode)
+  const { poop: { entries, loading, addEntry, updateEntry, deleteEntry, latestAddedId } } = useRoomData()
   const [editEntry, setEditEntry] = useState<PoopEntry | null>(null)
   const [showEditPopover, setShowEditPopover] = useState(false)
   const [deleteId, setDeleteId] = useState<string | null>(null)

@@ -3,8 +3,7 @@
 import { useState } from 'react'
 import PoopList from '@/components/poop/PoopList'
 import FeedSummaryModal from '@/components/feed/FeedSummaryModal'
-import { usePoopEntries } from '@/hooks/usePoopEntries'
-import { useFeedEntries } from '@/hooks/useFeedEntries'
+import { useRoomData } from '@/lib/RoomDataContext'
 import { useScrollHide } from '@/hooks/useScrollHide'
 import { cn } from '@/lib/utils'
 
@@ -12,18 +11,15 @@ interface PoopPageProps {
   params: { code: string }
 }
 
-export default function PoopPage({ params }: PoopPageProps) {
-  const { code } = params
+export default function PoopPage({ params: _ }: PoopPageProps) {
   const [showPopover, setShowPopover] = useState(false)
   const [showSummary, setShowSummary] = useState(false)
-  const { entries, loading, addEntry, updateEntry, deleteEntry } = usePoopEntries(code)
-  const { entries: feedEntries } = useFeedEntries(code)
+  const { poop: { entries, loading }, feed: { entries: feedEntries } } = useRoomData()
   const { primary, secondary } = useScrollHide()
 
   return (
     <>
       <PoopList
-        roomCode={code}
         showPopover={showPopover}
         onClosePopover={() => setShowPopover(false)}
       />
