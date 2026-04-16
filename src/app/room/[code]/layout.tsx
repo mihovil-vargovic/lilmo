@@ -194,9 +194,9 @@ function RoomLayoutInner({ code, children }: { code: string; children: React.Rea
           <img
             src="/icons/icon-512x512.png"
             alt="Lilmo"
-            width={100}
-            height={100}
-            className="rounded-full animate-splash-icon"
+            width={80}
+            height={80}
+            className="rounded-full animate-splash-icon -translate-y-8"
           />
         </div>
       )}

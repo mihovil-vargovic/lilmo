@@ -6,6 +6,10 @@ export interface Release {
 const releases: Release[] = [
   {
     date: '2026-04-16',
+    description: 'Splash icon moved up; join sheet no longer lags when keyboard appears.',
+  },
+  {
+    date: '2026-04-16',
     description: 'Splash screen now properly hides all loading — main UI only appears after all data is ready, with a 500ms buffer.',
   },
   {
