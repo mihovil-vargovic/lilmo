@@ -5,6 +5,10 @@ export interface Release {
 
 const releases: Release[] = [
   {
+    date: '2026-04-18',
+    description: 'Hourly timeline: empty past bars now show a diagonal line texture, matching the bottle style from the Summary sheet.',
+  },
+  {
     date: '2026-04-16',
     description: 'Hourly timeline: taller bars, future hours dimmed, and hour labels shown under filled slots.',
   },

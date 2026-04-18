@@ -32,14 +32,23 @@ export default function HourlyTimeline({ timestamps }: HourlyTimelineProps) {
     <div className="px-4 md:px-8 pt-3 pb-1">
       {/* Bars */}
       <div className="flex items-end gap-[3px] h-10">
-        {slots.map((h) => (
-          <div
-            key={h}
-            className={`flex-1 h-full rounded-md ${
-              h > currentHour ? 'bg-border/40' : filled.has(h) ? 'bg-foreground' : 'bg-border'
-            }`}
-          />
-        ))}
+        {slots.map((h) => {
+          const isFuture = h > currentHour
+          const isFilled = filled.has(h)
+          const isEmpty = !isFuture && !isFilled
+          return (
+            <div
+              key={h}
+              className={`flex-1 h-full rounded-md ${
+                isFuture ? 'bg-border/40' : isFilled ? 'bg-foreground' : ''
+              }`}
+              style={isEmpty ? {
+                backgroundColor: '#f0f0f0',
+                backgroundImage: 'repeating-linear-gradient(-45deg, #aaaaaa 0px, #aaaaaa 1px, #f0f0f0 1px, #f0f0f0 4px)',
+              } : undefined}
+            />
+          )
+        })}
       </div>
       {/* Hour labels */}
       <div className="flex mt-1">
